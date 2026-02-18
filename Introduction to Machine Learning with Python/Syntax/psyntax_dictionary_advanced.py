@@ -1,6 +1,7 @@
 from operator import itemgetter
 from collections import OrderedDict 
 import pandas as pd
+
 # 1.0
 # Task: Write a Python script to sort (ascending and descending) a dictionary by value. 
 d = {1: 2, 3: 4, 4: 3, 2: 1, 0: 0}
@@ -108,12 +109,7 @@ def my_sorted(input_dict, reverse = False):
 
 def my_sorted(input_dict, reverse = False):
     items = list(input_dict.items())
-    
-    if reverse == False:
-        items.sort(key = itemgetter(1), reverse = reverse)
-        
-    else:
-        items.sort(key = itemgetter(1), reverse = reverse)
+    items.sort(key = itemgetter(1), reverse = reverse)
     
     return dict(items)
     
@@ -388,7 +384,13 @@ def sum_values(input_dict):
     return res
         
 result = sum_values(d)
-    
+
+# OR
+def sum_values(input_dict):
+    return sum(v for v in d.values() if isinstance(v, (int, float)))
+
+result = sum_values(d)
+
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------    
@@ -402,3 +404,182 @@ n = 20
 
 # 6.1
 # Task: Write a Python script to create a dictionary with keys from 1 to n and values as the square of the keys using dictionary comprehension.
+
+def create_dict(n):
+    return {k: k*k for k in range(1, n+1)}
+
+result = create_dict(20)
+
+# 6.2
+# Task: Write a Python script to generate a dictionary of numbers and their squares and then print the items sorted by key.
+n = 20
+
+def create_dict(n):
+    return {k: k*k for k in range(1, n+1)}
+
+result = dict(sorted(create_dict(n).items(), key = itemgetter(0)))
+
+# 6.3
+# Task: Write a Python script to build the same dictionary iteratively with a for-loop and then compare it to the comprehension result.
+n = 20
+
+def create_dict_loop(n):
+    d = {}
+    for k in range(1, n+1):
+        d.update({k: k*k})
+    
+    return d
+
+def create_dict_comp(n):
+    return {k: k*k for k in range(1, n+1)}
+
+result = create_dict_loop(n) == create_dict_comp(n)
+
+# 6.4
+# Task: Write a Python script to allow user input for n and output a dictionary mapping each number from 1 to n to its square.
+n = 20
+
+def user_dict():
+    try:
+        n = int(input("Enter an integer: "))
+        return {k: k*k for k in range(1, n+1)}
+    except ValueError:
+        print("Please enter a valid integer.")
+        return {}
+
+# 7.0
+# Task: Write a Python script to print a dictionary where the keys are numbers between 1 and 15 (both included) and the values are the square of the keys.
+
+#print({k: k*k for k in range(1, 15+1)})
+ 
+# 7.1
+# Task: Write a Python script to create a dictionary with keys from 1 to 15 and their squares as values using a loop. 
+
+def create_dict():
+    d = {}
+    for n in range(1, 15+1):
+        d.update({n:n*n})
+    return d
+
+result = create_dict()
+
+# 7.2
+# Task: Write a Python script to generate this dictionary using dictionary comprehension and then print it sorted by key.
+
+def create_dict():
+    return {k: k*k for k in range(1, 15+1)} 
+    
+result = dict(sorted(create_dict().items(), key = itemgetter(0)))
+
+# 7.3
+# Task: Write a Python script to modify the dictionary so that the values are the cubes of the keys instead of squares.
+
+my_dict = {k: k*k for k in range(1, 15+1)}
+
+def modify_dict(d):
+    for k, v in d.items():
+        d[k] = v * k
+    
+    return d
+
+# OR
+def modify_dict(d):
+    return {k: v * k for k, v in d.items()}
+
+# OR
+def modify_dict(d):
+    return {k: k**3 for k in d}
+
+result = modify_dict(my_dict)
+
+# 7.4
+# Task: Write a Python script to use a function to build a dictionary for numbers 1 to n and then test it with n=15.
+
+def create_dict(n):
+    return {k: k*k for k in range(1, n+1)}
+
+result = create_dict(15)
+
+# 8.0
+# Task: Write a Python script to merge two Python dictionaries.
+d1 = {'a': 100, 'b': 200}
+d2 = {'x': 300, 'y': 200}
+   
+def merge_dicts(*dicts):
+    out = {}
+    for d in dicts:
+        out.update(d)
+    return out
+
+result = merge_dicts(d1, d2)
+
+# 8.1
+# Task: Write a Python script to merge two dictionaries and handle overlapping keys by taking the value from the second dictionary.   
+d1 = {'a': 100, 'b': 200}
+d2 = {'x': 300, 'y': 200}
+
+def merge_dicts(*args):
+    return {k: v for d in dicts for k, v in d.items()}
+    
+# OR
+def merge_dict(dct1, dct2):
+    out = dct1.copy()
+    for k in dct2: 
+        out[k] = dct2[k]
+    
+    return out
+
+# OR
+def merge_dicts(dct1, dct2):
+    return dct1 | dct2
+
+# OR
+def merge_dicts(d1, d2):
+    return {**d1, **d2}
+
+# 8.2
+# Task: Write a Python script to merge two dictionaries using the unpacking operator (**) and print the result.
+d1 = {'a': 100, 'b': 200}
+d2 = {'x': 300, 'y': 200}
+
+def merge_two(dct1, dct2):
+    return {**dct1, **dct2}
+    
+# 8.3
+# Task: Write a Python script to merge two dictionaries recursively when keys map to sub-dictionaries.
+d1 = {'a': 100, 'b': {'x': 10, 'y': 20}, 'c': 300}
+d2 = {'b': {'y': 999, 'z': 50}, 'd': 400}
+
+def merge_two(dct1, dct2):
+    result = dct1.copy()
+    
+    for k, v in dct2.items():
+        if k in result and isinstance(result[k], dict) and isinstance(v, dict):
+            result[k] = merge_two(result[k], v)
+        else:
+            result[k] = v
+    
+    return result
+
+result = merge_two(d1, d2)
+
+# 8.4
+# Task: Write a Python script to combine dictionaries and, in case of key collisions, concatenate their values if they are strings.
+d1 = {'a': 100, 'b': '200', 'c': 200, 'd': 400, 'e': 600, 'f': 800}    
+d2 = {'a': 200, 'b': '200', 'y': 400, 'z': 600, 'x': 700, 'd': 700}
+
+def merge_two_concat(a, b):
+    result = a.copy()
+    
+    for k,v in b.items():
+        if k in result and isinstance(result[k], str) and isinstance(v, str):
+            result[k] += v
+        else:
+            result[k] = v
+    
+    return result
+
+result = merge_two_concat(d1, d2)
+    
+# 9.0
+# Task:     
