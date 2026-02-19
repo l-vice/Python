@@ -1,5 +1,7 @@
 from operator import itemgetter
 from collections import OrderedDict 
+from functools import reduce
+from math import prod
 import pandas as pd
 
 # 1.0
@@ -188,7 +190,7 @@ result = insert_key_value(d, 3, 16, 320)
 
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
-# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ # #
 
 # 3.0
 # Task: Write a Python script to concatenate the following dictionaries to create a new one.
@@ -336,7 +338,7 @@ result = contains_key(my_dict, 6)
 
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
-# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 5.0
 # Task: Write a Python program to iterate over dictionaries using for loops.
@@ -393,7 +395,7 @@ result = sum_values(d)
 
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
-# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------    
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #    
     
 # 6.0
 # Task: Write a Python script to generate and print a dictionary that contains a number (between 1 and n) in the form (x, x*x).
@@ -447,6 +449,12 @@ def user_dict():
         print("Please enter a valid integer.")
         return {}
 
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+
 # 7.0
 # Task: Write a Python script to print a dictionary where the keys are numbers between 1 and 15 (both included) and the values are the square of the keys.
 
@@ -499,6 +507,11 @@ def create_dict(n):
     return {k: k*k for k in range(1, n+1)}
 
 result = create_dict(15)
+
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 8.0
 # Task: Write a Python script to merge two Python dictionaries.
@@ -581,5 +594,606 @@ def merge_two_concat(a, b):
 
 result = merge_two_concat(d1, d2)
     
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #    
+    
 # 9.0
-# Task:     
+# Task: Write a Python program to iterate over dictionaries using for loops.
+d = {'Red': 1, 'Green': 2, 'Blue': 3}
+
+#for color_key in d:
+#    print(color_key, "corresponds to", d[color_key])
+
+# 9.1
+# Task: Write a Python program to iterate over a dictionary using a for-loop and print each key, value, and index.
+d = {'Red': 1, 'Green': 2, 'Blue': 3}
+
+#for i, (k, v) in enumerate(d.items()):
+#    print(i, k, v)
+
+# 9.2
+# Task: Write a Python program to loop through a dictionary and display its keys sorted in alphabetical order.
+d = {'Red': 1, 'Green': 2, 'Blue': 3}
+
+def loop_dict(dct):
+    for k in sorted(dct):
+        print(k)
+
+#result = loop_dict(d)
+
+# 9.3
+# Task: Write a Python program to use dictionary comprehension to iterate and create a new dictionary with modified values.
+d = {'Red': 1, 'Green': 2, 'Blue': 3}
+
+def modify_dict(dct):
+    return {k: v**17 for k, v in dct.items()}
+    
+result = modify_dict(d)
+
+# 9.4
+# Task: Write a Python program to iterate over a dictionary's keys and values using nested loops to print a formatted output.
+d = {'Red': (1, 6), 'Green': (2, 7), 'Blue': (3, 11)}
+
+
+#for key, values in d.items():
+#    print(f"Key: {key}")
+#    for v in values:
+#        print(f" Value: {v}")
+
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 10.0
+# Task: Write a Python program to sum all the items in a dictionary.
+d = {'Red': (7, 7), 'Green': (16, 166), 'Blue': (74, 234)}
+
+# Method 1:
+
+def sum_dict(dct):
+    return sum(v for values in dct.values() for v in values)
+
+# Method 2: 
+def sum_dict(dct):
+    res = 0
+    for k, values in dct.items():
+        for v in values:
+            res+=v
+    
+    return res
+
+# Method 3:
+
+def sum_dict(dct):
+    return sum(map(sum, dct.values()))
+
+result = sum_dict(d)
+
+# 10.1
+# Task: Write a Python program to calculate the sum of all values in a dictionary where values are numbers.
+d = {'Red': (7, 7), 'Green': (16, 1, 166), 'Blue': (74, 234, 'grrr')}
+
+def sum_dict(dct):
+    return sum(v for values in d.values() for v in values if isinstance(v, (int, float)))
+
+result = sum_dict(d)
+
+# 10.2 
+# Task: Write a Python program to use a for-loop to iterate over dictionary values and compute their total sum.
+d = {'Red': (6432432, 11), 'Green': (16, 166), 'Blue': (74, 234)}
+
+def sum_dict(dct):
+    res = 0
+    for k, values in dct.items():
+        for v in values:
+            res+=v
+    return res
+
+result = sum_dict(d)
+
+# 10.3
+# Task: Write a Python program to implement a function that returns the sum of the items of a dictionary using the sum() function.
+d = {'Red': (6432432, 11), 'Green': (16, 166), 'Blue': (74, 234)}
+
+# Method 1:
+def sum_dict(d):
+    return sum(v for values in d.values() for v in values)
+    
+# Method 2:
+def sum_dict(dct):
+    return sum(map(sum, dct.values()))
+
+result = sum_dict(d)
+
+# 10.4
+# Task: Write a Python program to combine values of a dictionary with a reduce() function to compute their sum.
+d = {'Red': (6432432, 11), 'Green': (16, 166), 'Blue': (74, 234)}
+ 
+def sum_dict(dct):
+    return reduce(lambda a, b: a+b, (x for sublist in dct.values() for x in sublist), 0)
+    
+result = sum_dict(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 11.0
+# Task: Write a Python program to multiply all the items in a dictionary.
+d = {'data1': 100, 'data2': -54, 'data3': 247}
+
+# Method 1: 
+def dict_product(dct):
+    return reduce(lambda a, b: a*b, d.values(), 1)
+
+result = dict_product(d)
+
+# Method 2: 
+def dict_product(dct):
+    result = 1 
+    for v in dct.values():
+        result*=v
+    return result
+
+result = dict_product(d)
+
+# Method 2: 
+def dict_product(dct):
+    return prod(dct.values())
+
+result = dict_product(d)
+
+# 11.1
+# Task: Write a Python program to compute the product of all numeric values in a dictionary using a for-loop.
+d = {'a': ('botanics', 12, 66), 'b': (63, 132, 11), 'c': (125123512, 643745235132, 1), 'd': (1231231, 12313, 124214, 1)}
+
+def dict_product(dct):
+    res = 1
+    for v in (v for values in dct.values() for v in values if isinstance(v, (int, float))):
+       if isinstance(v, (int, float)):
+            res*=v
+    
+    return res
+    
+result = dict_product(d)
+
+# 11.2
+# Task: Write a Python program to use functools.reduce() to multiply all values in a dictionary.
+d = {'a': ('botanics', 12, 66), 'b': (63, 132, 11), 'c': (125123512, 643745235132, 0), 'd': (1231231, 12313, 124214, 1)}
+
+def dict_product(dct):
+    return reduce(lambda a, b: a*b, (v for values in dct.values() for v in values if isinstance(v, (int, float))), 1)
+
+result = dict_product(d)
+
+# 11.3
+# Task: Write a Python program to implement a function that iterates through a dictionary and multiplies its values, returning the result.
+d = {'a': ('botanics', 12, 66), 'b': (63, 132, 11), 'c': (125123512, 643745235132, 0), 'd': (1231231, 12313, 124214, 1)}
+
+def dict_product(dct):
+    return prod(v for values in dct.values() for v in values if isinstance(v, (int, float)))
+
+result = dict_product(d)
+
+# 11.4
+# Task: Write a Python program to multiply the items in a dictionary and handle the case where the dictionary is empty.
+d = {'a': ('botanics', 12, 66, ''), 'b': (63, 132, 11, ''), 'c': (125123512, 643745235132, 0), 'd': (1231231, 12313, 124214, 1)}
+
+def dict_product(dct):
+    return prod(v for values in dct.values() for v in values if isinstance(v, (int, float))) 
+
+result = dict_product(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 12.0
+# Task: Write a Python program to remove a key from a dictionary. 
+d = {'a': ('botanics', 12, 66, ''), 'b': (63, 132, 11, ''), 'c': (125123512, 643745235132, 0), 'd': (1231231, 12313, 124214, 1)}
+
+# Method 1: Use a loop.
+
+def remove_key(dct, key):
+    items = list(dct.items())
+    for k, v in items:
+        if k == key:
+            items.remove((k, v))
+    
+    return dict(items)
+    
+result = remove_key(d, 'a')
+
+# Method 2: Del
+
+def remove_key(dct, key):
+    del dct[key]
+    return dct
+   
+result = remove_key(d, 'b')
+
+# 12.1
+# Task: Write a Python program to remove a specified key from a dictionary using the del statement.
+d = {'a': 16, 'b': 81, 'c': 211, 'd': 52342, 'e': 6341, 'f': 5321}
+
+def remove_key(dct, key):
+    del dct[key]
+    return dct 
+    
+result = remove_key(d, 'c')
+
+# 12.2
+# Task: Write a Python program to remove a key from a dictionary using the pop() method and return its value.
+d = {k: k*k for k in range(1, 11)}
+
+result = d.pop(2)
+
+# 12.3
+# Task: Write a Python program to implement a function that deletes a key from a dictionary and handles the case when the key does not exist.
+d = {k: k**3 for k in range(1, 11)}
+
+def remove_key(dct, key):
+    if key in dct:
+        del dct[key]
+    return dct
+    
+result = remove_key(d, 2)
+
+# OR
+
+def remove_key(dct, key):
+    dct.pop(key, None)
+    
+    return dct
+    
+result = remove_key(d, 2)
+
+# 12.4
+# Task: Write a Python program to remove multiple keys from a dictionary by iterating over a list of keys to delete.
+k = {k: k**6 for k in range(1, 11)}
+
+def remove_keys(dct, keys):
+    items = list(dct.items())
+    for k, v in items:
+        if k in keys:
+            items.remove((k, v))
+    return dict(items)
+        
+# OR
+def remove_keys(dct, keys):
+    return {k: v for k, v in dct.items() if k not in keys}
+
+result = remove_keys(d, (2, 3, 4, 5))
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 13.0
+# Task: Write a Python program to map two lists into a dictionary.
+keys = ['red', 'green', 'blue']
+values = ['#FF0000', '#008000', '#0000FF']
+
+def map_lst(key_list, value_list):
+    out = {}
+    n = len(key_list)
+    
+    for i in range(n):
+        out[key_list[i]] = value_list[i]
+    
+    return out
+    
+result = map_lst(keys, values)
+
+# OR
+def map_lst(key_list, value_list):
+    return dict(zip(key_list, value_list))    
+
+# 13.1
+# Task: Write a Python program to convert two lists of equal length into a dictionary using the zip() function.
+keys = ['red', 'green', 'blue']
+values = ['#FF0000', '#008000', '#0000FF']
+
+def lst_to_dict(key_list, value_list):
+    return dict(zip(key_list, value_list))
+
+result = lst_to_dict(keys, values)
+
+# 13.2
+# Task: Write a Python program to map two lists into a dictionary, handling duplicate keys by storing values in a list.
+keys = ['red', 'green', 'blue', 'ivory', 'lightcyan', 'lightpink', 'blue']
+values = ['#FF0000', '#008000', '#0000FF', '#FFFFF0', '#E0FFFF', '#FFB6C1', '#0000FF']
+
+def lst_to_dict(key_list, value_list):
+    out = {}
+    for k, v in zip(key_list, value_list):
+        if k in out:
+            if isinstance(out[k], list):
+                out[k].append(v)
+            else:
+                out[k] = [out[k], v]
+        else:
+            out[k] = v
+    return out
+    
+result = lst_to_dict(keys, values) 
+
+# 13.3
+# Task: Write a Python program to implement a function that takes two lists and returns a dictionary where keys come from the first list and values from the second.
+list1 = [('red', '#FF0000'), ('green', '#008000'), ('blue', '#0000FF'), ('ivory', '#FFFFF0'), ('lightcyan', '#E0FFFF'), ('lightpink', '#FFB6C1'), ('blue', '#0000FF')]
+list2 = [('lightsalmon', '#FFA07A'), ('lightskyblue', '#87CEFA'), ('lightsteelblue', '#B0C4DE'), ('lightpink', '#FFB6C1'), ('magneta', '#FF00FF'), ('maroon', '#B03060'), ('mediumorchid', '#BA55D3')]
+
+def lst_to_dict(lst1, lst2):
+    return dict(zip(lst1, lst2))
+
+result = lst_to_dict(list1, list2)
+
+# 13.4
+# Task: Write a Python program to use dictionary comprehension to create a dictionary from two lists.
+list1 = [('red', '#FF0000'), ('green', '#008000'), ('blue', '#0000FF'), ('ivory', '#FFFFF0'), ('lightcyan', '#E0FFFF'), ('lightpink', '#FFB6C1'), ('blue', '#0000FF')]
+list2 = [('lightsalmon', '#FFA07A'), ('lightskyblue', '#87CEFA'), ('lightsteelblue', '#B0C4DE'), ('lightpink', '#FFB6C1'), ('magneta', '#FF00FF'), ('maroon', '#B03060'), ('mediumorchid', '#BA55D3')]
+
+def lst_to_dict(lst1, lst2):
+    return {k1[0]: k2[1] for k1, k2 in zip(lst1, lst2)}
+
+result = lst_to_dict(list1, list2)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 14.0
+# Task: Write a Python program to sort a given dictionary by key.
+d = {'red': '#FF0000', 'green': '#008000', 'black': '#000000', 'white': '#FFFFFF'}
+
+result = sorted(d.items())
+
+# 14.1
+# Task: Write a Python program to sort a dictionary by its keys in ascending order using sorted() and dictionary comprehension.
+d = {'red': '#FF0000', 'green': '#008000', 'black': '#000000', 'white': '#FFFFFF'}
+
+def sort_dict(dct, reverse=False):
+    return {k: dct[k] for k in sorted(dct, reverse=reverse)}
+
+result = sort_dict(d)
+
+# 14.2
+# Task: Write a Python program to output the items of a dictionary sorted by key using a for-loop.
+d = {'red': '#FF0000', 'green': '#008000', 'black': '#000000', 'white': '#FFFFFF'}
+
+def sort_dict(dct):
+    for item in sorted(dct.items()):
+        print(f"Items: {item}")
+        
+#result = sort_dict(d)
+
+# 14.3
+# Task: Write a Python program to implement a function that returns a sorted list of keys from a dictionary.
+d = {'red': '#FF0000', 'green': '#008000', 'black': '#000000', 'white': '#FFFFFF'}
+
+def sort_dict(dct):
+    return sorted(dct.items())
+    
+result = sort_dict(d)
+
+# 14.4
+# Task: Write a Python program to sort dictionary keys case-insensitively and print the sorted key-value pairs.
+d = {'rED': '#FF0000', 'GREEn': '#008000', 'BLack': '#000000', 'WHIte': '#FFFFFF'}
+
+result = sorted(d.items(), key = lambda x: x[0].lower())
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 15.0
+# Task: Write a Python program to get the maximum and minimum values of a dictionary.
+d = {k: k*k for k in range(1, 11)}
+
+def get_minmax_val(dct):
+    min_val = min(dct.items(), key = itemgetter(1))[1]
+    max_val = max(dct.items(), key = itemgetter(1))[1]
+    
+    return (max_val, min_val)
+
+result = get_minmax_val(d)
+
+# OR
+def get_minmax_val(dct):
+    return (min(dct.values()), max(dct.values()))
+
+result = get_minmax_val(d)
+
+# 15.1
+# Task: Write a Python program to determine the maximum and minimum values in a dictionary using the max() and min() functions.
+d = {k: k**3 for k in range(1, 11)}
+
+result = (min(d.values()), max(d.values()))
+
+# 15.2
+# Task: Write a Python program to iterate over dictionary values and print the maximum and minimum values.
+d = {k: k**5 for k in range(1, 11)}
+
+def get_minmax_val(dct):
+    values = list(dct.values())
+    
+    min_val = values[0]
+    max_val = values[0]
+    
+    for v in values:
+        if v < min_val:
+            min_val = v
+        elif v > max_val:
+            max_val = v
+    
+    return (min_val, max_val)
+    
+result = get_minmax_val(d)
+
+# 15.3
+# Task: Write a Python program to implement a function that returns a tuple containing the min and max values from a dictionary. 
+d = {k:k*k for k in range(1, 11)}
+
+def get_minmax_val(dct):
+    return (min(dct.values()), max(dct.values()))
+    
+result = get_minmax_val(d)
+
+# 15.4
+# Task: Write a Python program to use list comprehension to extract dictionary values and then find their maximum and minimum.     
+d = {k: k**6 for k in range(1, 11)}
+
+def get_minmax_val(dct):
+    values = [v for v in dct.values()]
+    return (min(values), max(values))
+    
+result = get_minmax_val(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 16.0
+# Task: Write a Python program to get a dictionary from an object's fields.
+class dictObj(object):
+    # Define the constructor method '__init__' for initializing object attributes.
+    def __init__(self):
+        # Initialize attributes 'x', 'y', 'z' with string values.
+        self.x = 'red'
+        self.y = 'Yellow'
+        self.z = 'Green'
+    # Define method 'do_nothing' that doesn't perform any actions (placeholder).
+    def do_nothing(self):
+        pass
+
+# Create an instance 'test' of the 'dictObj' class. 
+test = dictObj()
+
+# Print the '__dict__' attribute of the 'test' object, which contains its attribute-value pairs. 
+#print(test.__dict__)
+
+# 16.1
+# Task: Write a Python program to create a dictionary from the attributes of an object using the __dict__ attribute.
+
+class dictObj(object):
+    # Define the constructor method '__init__' for initializing object attributes.
+    def __init__(self):
+        self.x = 'fandango'
+        self.y = 'falu'
+        self.z = 'fantasy'
+    # Define method 'do_nothing' that doesn't perform any actions (placeholder).
+    def do_nothing(self):
+        pass
+
+# Create an instance 'test' of the 'dictObj' class.
+test = dictObj()
+
+# Print the '__dict__' attribute of the 'test' object, which contains its attribute-value pairs.
+#print(test.__dict__)
+
+# 16.2
+# Task: Write a Python program to iterate over an object's fields and convert them into a dictionary.
+
+class dictObj(object):
+    def __init__(self):
+        self.x = 'fawn'
+        self.y = 'sarcoline'
+        self.z = 'limerick'
+    
+    def do_nothing(self):
+        pass
+
+test = dictObj()
+result = {}
+
+for k, v in test.__dict__.items():
+    result[k] = v
+    
+#print(result)
+
+# 16.3
+# Task: Write a Python program to implement a function that extracts public fields from a class instance and returns them as a dictionary.
+
+class dictObj(object):
+    def __init__(self):
+        self.x = 'bistre'
+        self.y = 'jonquil'
+        self.z = 'bole'
+    def do_nothing(self):
+        pass
+    
+test = dictObj()
+
+def extract_public_fields(init):
+    return vars(init)
+    
+# OR
+def extract_public_fields(obj):
+    return {k: v for k, v in vars(obj).items() if not k.startswith('_')}
+
+result = extract_public_fields(test)
+
+# 16.4
+# Task: Write a Python program to serialize an object's attributes into a dictionary using introspection.
+class dictObj(object):
+    def __init__(self):
+        self.x = 'zole'
+        self.y = 'catawba'
+        self.z = 'cinereous'
+    
+    def do_nothing(self):
+        pass
+
+test = dictObj()
+
+#print(vars(test))
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 17.0
+# Task: Write a Python program to remove duplicates from the dictionary. 
+d = {
+    'id1': {
+        'name': ['Sara'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id2': {
+        'name': ['David'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id3': {
+        'name': ['Sara'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id4': {
+        'name': ['Luka'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    }
+}
+
+def remove_duplicates(dct):
+    out = {}
+    for k, value in dct.items():
+        if value not in out.values():
+            out[k] = value
+    return out
+
+result = remove_duplicates(d)
+
+# 17.1
+# Task: Write a Python program to remove duplicate key-value pairs from a dictionary where values are lists by merging duplicates.
+
+
+
+
+
+
+
