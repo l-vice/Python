@@ -1,8 +1,13 @@
 from operator import itemgetter
-from collections import OrderedDict 
+from collections import OrderedDict
+from collections import Counter 
 from functools import reduce
 from math import prod
 import pandas as pd
+
+### TO REPEAT 17
+
+
 
 # 1.0
 # Task: Write a Python script to sort (ascending and descending) a dictionary by value. 
@@ -75,7 +80,6 @@ def my_sorted(input_dict, reverse = False):
     
 result = my_sorted(d)
 
-
 # 1.4
 # Task: Write a Python script to compare two different methods of sorting a dictionary by value and print their results.
 d = {1: 2, 3: 4, 4: 3, 2: 1, 0: 0}
@@ -99,13 +103,10 @@ def my_sorted(input_dict, reverse = False):
             for j in range(i+1, len(items)):
                 if items[j][1] < items[min_index][1]:
                     min_index = j
-            
-            
+                        
             items[i], items[min_index] = items[min_index], items[i]
         
-    
     return dict(items)
-
 
 # Method 2: Using list().sort
 
@@ -115,7 +116,6 @@ def my_sorted(input_dict, reverse = False):
     
     return dict(items)
     
-
 result = my_sorted(d, reverse=True)
 
 # ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
@@ -773,7 +773,12 @@ result = dict_product(d)
 d = {'a': ('botanics', 12, 66), 'b': (63, 132, 11), 'c': (125123512, 643745235132, 0), 'd': (1231231, 12313, 124214, 1)}
 
 def dict_product(dct):
-    return prod(v for values in dct.values() for v in values if isinstance(v, (int, float)))
+    res = 1 
+    for values in dct.values():
+        for v in values:
+            if isinstance(v, (int, float)):
+                res*=v
+    return res
 
 result = dict_product(d)
 
@@ -1190,10 +1195,193 @@ result = remove_duplicates(d)
 
 # 17.1
 # Task: Write a Python program to remove duplicate key-value pairs from a dictionary where values are lists by merging duplicates.
+d = {'id1': ('Physics', 'Theology'), 'id2': ('Mathematics', 'Statistics'), 'id3': ('Computer Science', 'Biology'), 'id4': ('Chemistry', 'History'), 'id2': ('Finance', 'Combinatorics')}
 
+def remove_duplicates(dct):
+    out = {}
+    items = list(dct.items())
+    
+    for k, v in items:
+        if k in out:
+            out[k].append(v)
+        else:
+            out[k] = v
+    return out
 
+result_2 = remove_duplicates(d)
 
+# 17.2
+# Task: Write a Python program to filter a dictionary so that each value appears only once, keeping the first occurrence.
+d = {'id1': 'Physics', 'id3': 'Mathematics', 'id4': 'Chemistry', 'id2': 'Combinatorics', 'id5': 'Chemistry', 'id6': 'Chemistry', 'id12': 'Mathematics'}
 
+def filter_dict(dct):
+    out = {}
+    for k, v in dct.items():
+        if v not in out.values():
+            out[k] = v
+    return out
+    
+result = filter_dict(d)
 
+# 17.3
+# Task: Write a Python program to implement a function that removes duplicate items from a dictionary and returns a new dictionary with unique values.
+d = {'id1': ('Physics', 'Theology'), 'id2': ('Mathematics', 'Statistics'), 'id3': ('Computer Science', 'Biology'), 'id3': ('Computer Science', 'Biology'), 'id4': ('Chemistry', 'History')}
+
+def remove_duplicates(dct):
+    out = {}
+    for item in dct.items():
+        if item not in out.items():
+            out.update({item})
+    
+    return out
+
+result = remove_duplicates(d)
+
+# 17.4
+# Task: Write a Python program to consolidate duplicate keys in a dictionary by summing their values.
+d = [('a', 2), ('a', 7), ('b', 11), ('c', 17), ('d', 18), ('e', 25), ('f', 177), ('g', 12)]
+
+def consolidate_keys(data):
+    out = {}
+    for k, v in data:
+        if k in out:
+           out[k] += v
+        else:
+            out[k] = v
+    return out
+    
+result = consolidate_keys(d)
+
+# 18.0
+# Task: Write a Python program to check if a dictionary is empty or not.
+d = {}
+
+def empty_dict(dct):
+    return len(dct) == 0
+
+result = empty_dict(d)
+
+# 18.1
+# Task: Write a Python program to check whether a dictionary is empty by evaluating its boolean value. 
+d = {}
+def empty_dict(dct):
+    return bool(not dct)
+
+result = empty_dict(d)
+
+# 18.2
+# Task: Write a Python program to implement a function that returns True if a dictionary has no keys and False otherwise.
+d = {'a': 2, 'b': 2}
+
+def empty_dict(dct):
+    return len(d.keys()) == 0
+
+result = empty_dict(d)
+
+# 18.3
+# Task: Write a Python program to test the emptiness of a dictionary by comparing its length to zero.
+d = {}
+
+def empty_dict(dct):
+    return len(dct) == 0
+
+result = empty_dict(d)
+
+# 18.4
+# Task: Write a Python program to use conditional expressions to output whether a dictionary is empty.
+d = {}
+
+def empty_dict(dct):
+    if len(dct) > 0:
+        return False
+    return True
+
+result = empty_dict(d)
+
+# 19.0
+# Task: Write a Python program to combine two dicts by adding values for common keys.
+d1 = {'a': 16, 'b': 11, 'c': 17, 'd': 74, 'e': 76}
+d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
+
+def combine_dicts(*dicts):
+    out = {}
+    for d in dicts:
+        for k, v in d.items():
+            if k in out:
+                out[k] +=v
+            else:
+                out[k] = v
+    return out
+    
+result = combine_dicts(d1,d2)
+
+# 19.1
+# Task: Write a Python program to combine two dictionaries and add values for keys that appear in both using Counter (collections)
+d1 = {'a': 16, 'b': 11, 'c': 17, 'd': 74, 'e': 76}
+d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
+
+def combine_dicts(*dicts):
+    out = {}
+    for d in dicts:
+        out =+ Counter(d)
+    return result
+
+result = combine_dicts(d1, d2)
+
+# 19.2
+# Task: Write a Python program to merge two dictionaries by summing the values of common keys with a loop.
+d1 = {'a': 16, 'b': 11, 'c': 17, 'd': 74, 'e': 76}
+d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
+
+def combine_dicts(*dicts):
+    out = {}
+    for d in dicts: 
+        for k, v in d.items():
+            if k in out:
+                out[k] += v
+            else:
+                out[k] = v
+    return out
+
+result = combine_dicts(d1, d2)
+
+# 19.3
+# Task: Write a Python program to use dictionary comprehension to create a new dictionary that adds values for matching keys from two dictionaries.
+d1 = {'a': 16, 'b': 11, 'c': 17, 'd': 74, 'e': 76}
+d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
+
+def combine_dicts(dct1, dct2):
+    return {k: dct1.get(k, 0) + dct2.get(k, 0) for k in set(dct1) | set(dct2)}
+    
+result_2 = combine_dicts(d1, d2)
+
+# 19.4 
+# Write a Python program to implement a function that takes two dictionaries and returns a merged dictionary with summed values for shared keys.
+d1 = {'a': 16, 'b': 11, 'c': 17, 'd': 74, 'e': 76}
+d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
+
+# Method 1: Standard for loop
+
+def combine_dicts(*dicts):
+    out = {}
+    for d in dicts: 
+        for k, v in d.items():
+            if k in out:
+                out[k]+=v
+            else: 
+                out[k] = v
+    return out
+    
+result = combine_dicts(d1, d2)
+
+# Method 2: Counter
+
+def combine_dicts(*dicts):
+    out = {}
+    for d in dicts:
+        out =+ Counter(d)
+    return dict(sorted(out.items()))
+
+result = combine_dicts(d1, d2)
 
 
