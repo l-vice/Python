@@ -1,13 +1,14 @@
 from operator import itemgetter
-from collections import OrderedDict
-from collections import Counter 
+from collections import OrderedDict, Counter, defaultdict
 from functools import reduce
 from math import prod
+from itertools import product
+from heapq import nlargest
+from string import punctuation
+from tabulate import tabulate
 import pandas as pd
 
 ### TO REPEAT 17
-
-
 
 # 1.0
 # Task: Write a Python script to sort (ascending and descending) a dictionary by value. 
@@ -1195,20 +1196,19 @@ result = remove_duplicates(d)
 
 # 17.1
 # Task: Write a Python program to remove duplicate key-value pairs from a dictionary where values are lists by merging duplicates.
-d = {'id1': ('Physics', 'Theology'), 'id2': ('Mathematics', 'Statistics'), 'id3': ('Computer Science', 'Biology'), 'id4': ('Chemistry', 'History'), 'id2': ('Finance', 'Combinatorics')}
+dicts = [('id1', ('Physics', 'Theology')), ('id2', ('Mathematics', 'Statistics')), ('id3', ('Computer Science', 'Biology')), ('id4', ('Chemistry', 'History')), ('id2', ('Finance', 'Combinatorics'))]
 
 def remove_duplicates(dct):
     out = {}
-    items = list(dct.items())
     
-    for k, v in items:
+    for k, v in dct.items():
         if k in out:
-            out[k].append(v)
+            out[k] += v
         else:
             out[k] = v
     return out
 
-result_2 = remove_duplicates(d)
+result = remove_duplicates(d)
 
 # 17.2
 # Task: Write a Python program to filter a dictionary so that each value appears only once, keeping the first occurrence.
@@ -1251,6 +1251,10 @@ def consolidate_keys(data):
     return out
     
 result = consolidate_keys(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 18.0
 # Task: Write a Python program to check if a dictionary is empty or not.
@@ -1297,6 +1301,10 @@ def empty_dict(dct):
     return True
 
 result = empty_dict(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 19.0
 # Task: Write a Python program to combine two dicts by adding values for common keys.
@@ -1353,7 +1361,7 @@ d2 = {'a': 17, 'c': 31, 'x': 74, 'y': 76, 'w': 11}
 def combine_dicts(dct1, dct2):
     return {k: dct1.get(k, 0) + dct2.get(k, 0) for k in set(dct1) | set(dct2)}
     
-result_2 = combine_dicts(d1, d2)
+result = combine_dicts(d1, d2)
 
 # 19.4 
 # Write a Python program to implement a function that takes two dictionaries and returns a merged dictionary with summed values for shared keys.
@@ -1384,4 +1392,727 @@ def combine_dicts(*dicts):
 
 result = combine_dicts(d1, d2)
 
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 20.0
+# Task: Write a Python program to print all distinct values in a dictionary.
+lst = [{"V": "S001"}, {"V": "S002"}, {"VI": "S001"}, {"VI": "S005"}, {"VII": "S005"}, {"V": "S009"}, {"VIII": "S007"}]    
+
+unique_values = []
+ 
+for d in lst:
+    for v in d.values():
+        unique_values.append(v)
+
+#print(set(unique_values))           
+
+# 20.1
+# Task: Write a Python program to extract all unique values from a dictionary where values might be duplicated.
+lst = [{"V": "S001"}, {"V": "S002"}, {"VI": "S001"}, {"VI": "S005"}, {"VII": "S005"}, {"V": "S009"}, {"VIII": "S007"}]
+
+unique_values = []
+
+for d in lst:
+    for v in d.values():
+        unique_values.append(v)
+
+unique_values = set(unique_values)
+
+# 20.2
+# Task: Write a Python program to iterate over a dictionary and add all distinct values to a set, then print the set.
+lst = [{"V": "S001"}, {"V": "S002"}, {"VI": "S001"}, {"VI": "S005"}, {"VII": "S005"}, {"V": "S009"}, {"VIII": "S007"}]
+
+unique_values = set()
+
+for d in lst:
+    for v in d.values():
+        unique_values.add(v)
+
+#print(unique_values)
+
+# 20.3 
+# Task: Write a Python program to use set comprehension to output the distinct values of a dictionary.
+d = {'a': 11, 'b': 16, 'c': 16, 'd': 17}
+
+def distinct_values(l):
+    return set(v for v in d.values())
+
+result = distinct_values(d)
+
+# 20.4
+# Task: Write a Python program to merge multiple dictionaries and then display a sorted list of unique values.
+d1 = {'a': 11, 'b': 16, 'c': 16, 'd': 17}
+d2 = {'e': 12, 'f': 16, 'g': 63, 'h': 76}
+d3 = {'i': 77, 'j': 17, 'k': 90, 'l': 199}
+
+def distinct_values(*dicts):
+    merged_dict = {}
+    for dct in dicts:
+        merged_dict.update(dct)
+    
+    unique_values = set()
+    for v in merged_dict.values():
+        unique_values.add(v)
+    
+    return list(sorted(unique_values))
+    
+result = distinct_values(d1, d2, d3)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 21.0
+# Task: Write a Python program to create and display all combinations of letters, selecting each letter from a different key in a dictionary.
+d = {'1': ['a', 'b'], '2': ['c', 'd'], '3': ['e', 'f'], '4': ['g', 'h'], '5': ['i', 'j']}
+
+result = []
+
+for combo in product(*[d[k] for k in sorted(d.keys())]):
+    result.append(''.join(combo))
+        
+# 21.1
+# Task: Write a Python program to generate all combinations of letters by selecting one letter from each list in a dictionary.
+d = {'1': ['a', 'b'], '2': ['c', 'd'], '3': ['e', 'f'], '4': ['g', 'h'], '5': ['i', 'j']}
+
+result = [''.join(p) for p in product(*d.values())]
+
+# 21.2
+# Task: Write a Python program to use itertools.product to create all letter combinations from a dictionary of lists.
+d = {'1': ['a', 'b'], '2': ['c', 'd'], '3': ['e', 'f'], '4': ['g', 'h'], '5': ['i', 'j']}
+
+result = [''.join(p) for p in product(*d.values())]
+
+# 21.3
+# Task: Write a Python program to recursevly combine letters from different keys in a dictionary and print each combination.
+d = {'1': ['a', 'b'], '2': ['c', 'd'], '3': ['e', 'f'], '4': ['g', 'h'], '5': ['i', 'j']}
+
+def recursive_combine(lists, prefix = ''):
+    if not lists:
+        print(prefix)
+        return
+    
+    first, *rest = lists
+    
+    for letter in first:
+        recursive_combine(rest, prefix + letter)
+    
+# recursive_combine(list(d.values()))
+
+# 21.4
+# Task: Write a Python program to implement a function that outputs a list of strings formed by all possible combinations of values from a dictionary's keys.
+d = {'1': ['a', 'b'], '2': ['c', 'd'], '3': ['e', 'f'], '4': ['g', 'h'], '5': ['i', 'j']}
+
+def recursive_combine(d):
+    values = list(d.values())
+    
+    def combine(lists):
+        if not lists:
+            return ['']
+        rest = combine(lists[1:])
+        return [x + y for x in lists[0] for y in rest]
+    
+    return combine(values)
+
+result = recursive_combine(d)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 22.0
+# Task: Write a Python program to find the highest 3 values of corresponding keys in a dictionary.
+d = {'a': 500, 'b': 5874, 'c': 560, 'd': 400, 'e': 5874, 'f': 20}
+
+result = nlargest(3, d, key = d.get)
+
+# 22.1
+# Task: Write a Python program to extract the three highest values from a dictionary and return them as a sorted list.
+d = {'a': 500, 'b': 5874, 'c': 560, 'd': 400, 'e': 5874, 'f': 20}
+
+def return_highest(dct, n_values = 1):
+    return sorted(nlargest(n_values, dct, key = dct.get))
+
+result = return_highest(d, n_values = 3)
+
+# 22.2
+# Task: Write a Python program to use heapq.nlargest to find the top three values in a dictionary.
+d = {'a': 500, 'b': 5874, 'c': 560, 'd': 400, 'e': 5874, 'f': 20}
+
+result = nlargest(3, d.values())
+
+# 22.3
+# Task: Write a Python program to implement a function that returns the keys corresponding to the highest three values in a dictionary.
+d = {'a': 500, 'b': 5874, 'c': 560, 'd': 400, 'e': 5874, 'f': 20}
+
+def highest_keys(dct, n_values = 1):
+    keys = []
+    largest_items = nlargest(n_values, d.items())[1]
+    
+    for k, v in largest_items:
+        keys.append(k)
+    
+    return keys
+
+result = highest_keys
+
+# 22.4
+# Task: Write a Python program to sort a dictionary by value and then output the three largest key-value pairs.
+d = {'a': 500, 'b': 5874, 'c': 560, 'd': 400, 'e': 5874, 'f': 20}
+def sorted_dict(dct, n_values):
+    srt_dct = dict(sorted(dct.items(), key = itemgetter(1)))
+
+    return nlargest(n_values, srt_dct.items())    
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 23.0
+# Task: Write a Python program to combine values in a list of dictionaries.
+l = [{'item': 'item1', 'amount': 400}, {'item': 'item2', 'amount': 300}, {'item': 'item1', 'amount': 750}]
+
+out = Counter()
+
+for d in l:
+    out[d['item']] += d['amount']
+
+# 23.1
+# Task: Write a Python program to merge a list of dictionaries by summing values for common keys using collections.Counter.
+l = [{'item': 'item1', 'amount': 400}, {'item': 'item2', 'amount': 300}, {'item': 'item1', 'amount': 750}]
+
+out = Counter()
+
+for d in l:
+    out[d['item']] += d['amount']
+    
+# 23.2
+# Task: Write a Python program to iterate through a list of dictionaries and accumulate the values of identical keys into a new dictionary.
+l = [{'item': 'item1', 'amount': 400}, {'item': 'item3', 'amount': 360}, {'item': 'item3', 'amount': 160}, 
+     {'item': 'item2', 'amount': 300}, {'item': 'item2', 'amount': 300}, {'item': 'item1', 'amount': 750},
+     {'item': 'item4', 'amount': 300}, {'item': 'item4', 'amount': 300}, {'item': 'item2', 'amount': 300}]
+
+out = Counter()
+
+for d in l:
+    out[d['item']] += d['amount']
+    
+# 23.3
+# Task: Write a Python program to use a dictionary comprehension to combine values from multiple dictionaries in a list.
+l = [{'item': 'item1', 'amount': 400}, {'item': 'item3', 'amount': 360}, {'item': 'item3', 'amount': 160}, 
+     {'item': 'item2', 'amount': 300}, {'item': 'item2', 'amount': 300}, {'item': 'item1', 'amount': 750},
+     {'item': 'item4', 'amount': 300}, {'item': 'item4', 'amount': 300}, {'item': 'item2', 'amount': 300}]
+
+# Method 1: All in one line
+
+def combine_values(dicts):
+    return {k: sum(v['amount'] for v in dicts if v['item'] == k)
+            for k in {v['item'] for v in dicts}}
+
+
+def combine_values(dicts):
+    return {k: sum(v['amount'] for v in dicts if v['item'] == k)
+            for k in {v['item'] for v in dicts}}
+
+result = combine_values(l)
+            
+# Method 3: Default dict, best way
+out = defaultdict(int)
+
+for d in l:
+    out[d['item']] += d['amount']
+
+out
+
+# 23.4
+# Task: Write a Python program to implement a function that consolidates a list of dictionaries into one by adding values for matching keys.
+l = [{'item': 'item1', 'amount': 400}, {'item': 'item3', 'amount': 360}, {'item': 'item3', 'amount': 160}, 
+     {'item': 'item2', 'amount': 300}, {'item': 'item2', 'amount': 300}, {'item': 'item1', 'amount': 750},
+     {'item': 'item4', 'amount': 300}, {'item': 'item4', 'amount': 300}, {'item': 'item2', 'amount': 300}]
+
+# Method 1: Counter()
+def consolidate_dicts(dicts):
+    out = Counter()
+    
+    for d in dicts:
+        out[d['item']] += d['amount']
+    return out
+
+# Method 2: defaultdict()
+def consolidate_dicts(dicts):
+    out = defaultdict()
+    
+    for d in dicts:
+        out[d['item']] += d['amount']
+    return out
+
+# Method 3: Dictionary comprehension
+def consolidate_dicts(dicts):
+    return {k: sum(v['amount'] for v in dicts if v['item'] == k) for k in {v['item'] for v in dicts}}
+    
+result = consolidate_dicts(l)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 24.0
+# Task: Write a Python program to create a dictionary from a string.
+my_str = 'ULTRAGOYY'
+
+# Method 1: loop
+
+def str_to_dict(s):
+    out = {}
+    for c in s:
+        if c in out:
+            out[c] += 1
+        else:
+            out[c] = 1
+    return out
+
+result = str_to_dict(my_str)    
+
+# Method 2: Counter()
+out = Counter(my_str)
+
+# 24.1
+# Task: Write a Python program to convert a string into a dictionary where each key is a character and its value is the frequency of that character.
+my_str = 'davidstar'
+
+out = {}
+
+for c in my_str:
+    out[c] = out.get(c, 0) + 1
+ 
+# 24.2
+# Task: Write a Python program to use collections.Counter to count the frequency of each character in a string.
+my_str = "idf"
+
+out = {}
+
+my_str = "IDF"
+
+# 24.3
+# Task: Write a Python program to iterate over a string and manually tally character counts in a dictionary.
+my_str = 'letssgooo'
+
+out = {}
+
+for c in my_str:
+    if c in out:
+        out[c] += 1
+    else:
+        out[c] = 1
+
+# 24.4
+# Task: Write a Python program to implement a function that returns a frequency dictionary for a given string, ignoring cases.
+my_str = "I went for a walk today, and I liked it."
+
+def str_freq(s):
+    new_string = ''.join(list(filter(lambda c: c not in punctuation and c != ' ', s)))
+    out = {}
+    for c in new_string:
+        if c in out:
+            out[c] += 1
+        else:
+            out[c] = 1
+    
+    return out
+
+result = str_freq(my_str)
+
+# 25.0
+# Task: Write a Python program to print a dictionary in table format.
+my_dict = {'C1': [1, 2, 3], 'C2': [5, 6, 7], 'C3': [9, 10, 11]}
+
+# Method 1: Pandas
+result = pd.DataFrame(data=my_dict.items(), columns = ['Key', 'Value'])
+
+# Method 2: for loop
+
+#for row in zip(*([key] + (value) for key, value in sorted(my_dict.items()))):
+#    print(*row)
+    
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #    
+    
+# 25.1
+# Task: Write a Python program to print a dictionary contents in a tabular format with aligned columns.
+my_dict = {'C1': [1, 2, 3], 'C2': [5, 6, 7], 'C3': [9, 10, 11]}
+
+result = pd.DataFrame(data = my_dict.items(), columns = ['Key', 'Value'])
+
+# 25.2
+# Task: Write a Python program to use the tabulate module to display a dictionary as a formatted table.
+my_dict = {'C1': [1, 2, 3], 'C2': [5, 6, 7], 'C3': [9, 10, 11]}
+
+result = tabulate(my_dict.items(), headers = ['Key', 'Value'], tablefmt = 'pipe')
+
+# 25.3
+# Task: Write a Python program to iterate over dictionary items and print each on a new line with fixed column widths.
+my_dict = {'C1': [1, 2, 3], 'C2': [5, 6, 7], 'C3': [9, 10, 11]}
+
+col_width_k = 10
+col_width_v = 5
+        
+#for k, values in my_dict.items():
+#    print(f"{k:<{10}}") 
+#    for v in values:
+#       print(f"{v:>{20}}")
+
+# 25.4
+# Task: Write a Python program to format and print a dictionary where keys and values are left-justified in a table.
+my_dict = {'C1': [1, 2, 3], 'C2': [5, 6, 7], 'C3': [9, 10, 11]}
+
+#for k, values in my_dict.items():
+#    print(f"{k:<{col_width_k}}")
+#    for v in values:
+#        print(f"{v:<{col_width_v}}")
+        
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 26.0 
+# Task: Write a Python program to count the values associated with a key in a dictionary.
+my_dicts = [{'id': 1, 'success': True, 'name': 'Lary'},
+           {'id': 2, 'success': False, 'name': 'Rabi'},
+           {'id': 3, 'success': True, 'name': 'Alex'}]
+
+# Print the sum of 'id' values for all students in the 'student' list.
+#print(sum(d['id'] for d in my_dicts))
+    
+# Print the sum of 'success' for all student in the 'student' list.
+#print(sum(d['success'] for d in my_dicts))
+
+# 26.1
+# Task: Write a Python program to count the number of elements in a dictionary value when the value is a list. 
+my_dict = {'a': [1, 2, 3], 'b': 1, 'c': [5, 7, 8], 'd': [77, 2, 1], 'e': 11}
+
+# Method 1: Dictionary comprehension.
+
+def count_elements_if_list(dct):
+    return {k: 1 if isinstance(v, (int, float, str)) else len(v) for k, v in dct.items()}
+    
+result = count_elements_if_list(my_dict)
+
+# Method 2: For loop
+
+def count_elements_if_list(dct):
+    out = {}
+    
+    for k, values in dct.items():
+        if k in dct and isinstance(values, list):
+                out[k] = len(values)
+        else:
+            out[k] = 1
+    
+    return out
+
+result = count_elements_if_list(my_dict)
+
+# 26.2
+# Task: Write a Python program to iterate over a dictionary and sum the lengths of list values for a given key.
+my_dict = {'a': [1, 2, 3], 'b': 1, 'c': [5, 7, 8], 'd': [77, 2, 1], 'e': 11}
+
+
+def count_key_elements(dct, key):
+    for k, v in dct.items():
+        if k == key:
+            if isinstance(v, list):
+                return len(v)
+            else:
+                return 1
+
+result = count_key_elements(my_dict, 'e')
+
+# 26.3
+# Task: Write a Python program to use a loop to calculate how many items are associated with each key in a dictionary where values are lists.
+my_dict = {'a': [1, 2, 3], 'b': 1, 'c': [5, 7, 8], 'd': [77, 2, 1], 'e': 11}
+
+def count_elements(dct):
+    out = {}
+    for k, v in dct.items():
+        if isinstance(v, list):
+            out[k] = len(v)
+    return out
+
+result = count_elements(my_dict)
+
+# 26.4
+# Task: Write a Python program to implement a function that returns the count of items for a specificed key in a dictionary.
+my_dict = {
+    'id1': {
+        'name': ['Sara'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id2': {
+        'name': ['David'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id3': {
+        'name': ['Clara'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    },
+    'id4': {
+        'name': ['Luka'],
+        'class': ['V'],
+        'subject_integration': ['english, math, science']
+    }
+}
+
+def count_items(dct, key):
+    for k, v in dct.items():
+        if k == key:
+            return len(v)
+
+result = count_items(my_dict, 'id1')
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 27.0
+# Task: Write a Python program to convert a list into a nested dictionary of keys.
+my_list = [1, 2, 3, 4]
+
+new_dict = current = {}
+
+for name in my_list:
+    current[name] = {}
+    current = current[name]
+
+#print(new_dict)
+
+# 27.1
+# Task: Write a Python program to recursively convert a list of elements into a nested dictionary, where each element is a key.
+my_list = [1, 2, 3, 4]
+
+def recursive_list_conversion(lst):
+    if not lst:
+        return {}
+    
+    return {lst[0]: recursive_list_conversion(lst[1:])}
+
+result = recursive_list_conversion(my_list)        
+
+# 27.2
+# Task: Write a Python program to create a nested dictionary from a list using a for-loop and dictionary assignment.
+my_list = [1, 2, 3, 4]
+
+def create_dict(lst):
+    out = current = {}
+    
+    for ele in lst:
+        current[ele] = {}
+        current = current[ele]
+    
+    return new_dict
+
+result = create_dict(my_list)
+     
+# 27.3
+# Task: Write a Python program to use recursion to transform a list into a nested dictionary structure with each element as a key.
+my_list = [1, 2, 3, 4, 5, 6, 7, 8]
+
+def recursive_list_conversion(lst):
+    if not lst:
+        return {}
+    
+    return {lst[0]: recursive_list_conversion(lst[1:])}
+
+result = recursive_list_conversion(my_list)
+
+# 27.4
+# Task: Write a Python program to implement a function that returns a nested dictionary representation of a list of items.
+my_list = [1, 2, 3, 4, 5, 6, 7, 8]
+
+# Method 1: Recursion, best.
+def recursive_list_conversion(lst):
+    if not lst:
+        return {}
+    
+    return {lst[0]: recursive_list_conversion(lst[1:])}
+
+result = recursive_list_conversion(my_list)    
+
+# Method 2: For loop.
+
+def loop_list_conversion(lst):
+    out = current = {}
+    
+    for ele in lst:
+        current[ele] = {}
+        current = current[ele]
+    
+    return out
+    
+result = loop_list_conversion(my_list)
+
+
+# 28.0
+# Task: Write a Python program to sort a list alphabetically in a dictionary.
+my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 8]}
+
+sorted_dict = {k: sorted(v) for k, v in my_dict.items()}
+
+# 28.1
+# Task: Write a Python program to sort the list values within a dictionary in alphabetical order.
+my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 8]}
+
+def sort_values(dct):
+    out = {}
+    
+    for k, v in dct.items():
+        if isinstance(v, list):
+            out[k] = sorted(v)
+        else:
+            out[k] = v
+    
+    return out
+    
+# 28.2
+# Task: Write a Python program to iterate over a dictionary and sort each list value alphabetically.
+my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 8]}
+
+def sort_values(dct):
+    for k, v in dct.items():
+        if isinstance(v, list):
+            dct[k] = sorted(v)
+        else:
+            dct[k] = v
+    
+    return dct
+
+result = sort_values(my_dict)
+
+# 28.3
+# Task: Write a Python program to use dictionary comprehension to return a new dictionary with sorted list values.
+my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 8]}
+
+sorted_dict = {k: sorted(v) for k, v in my_dict.items()}
+
+# 28.4
+# Task: Write a Python program to implement a function that takes a dictionary of lists and sorts each list alphabetically.
+my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 8]}
+
+def sorted_dict(dct):
+    return {k: sorted(v) for k, v in dct.items()}
+
+# 29.0
+# Task: Write a Python program to remove spaces from dictionary keys.
+my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
+
+result = {k.translate({32: None}): v for k, v in my_dict.items()}
+
+# 29.1
+# Task: Write a Python program to remove all spaces from the keys of a dictionary and return a new dictionary.
+my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
+
+def remove_whitespace(dct):
+    return {k.translate({32: None}): v for k, v in dct.items()}
+
+# 29.2
+# Task: Write a Python program to iterate over a dictionary and strip whitespace from each key.
+my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
+
+def remove_whitespace(dct):
+    out = {}
+    for k, v in dct.items():
+        clean_key = k.translate({32: None})
+        out[clean_key] = v
+    
+    return out
+    
+result = remove_whitespace(my_dict)
+
+# 29.3
+# Task: Write a Python program to use dictionary comprehension to create a dictionary with keys that have no spaces.   
+my_dict = {"S 00--1": ['Math', 'Science'], 'S 0-0=2': ['Math', 'English']}
+
+result = {k.translate({32: None}): v for k, v in my_dict.items()}
+
+# 29.4
+# Task: Write a Python program to implement a function that cleans dictionary keys by removing spaces and special characters.
+my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
+
+def remove_characters(key):
+    return ''.join(filter(lambda c: c != ' ' or c not in punctuation, key))
+
+def remove_specials(dct):
+    out = {}
+    for k, v in dct.items():
+        clean_key = ''.join(filter(lambda c: c != ' ' or c not in punctuation, k))
+        out[clean_key] = v
+    
+    return out
+
+result = remove_specials(my_dict)
+
+# 30.0
+# Task: Write a Python program to get the top three items in a shop. 
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+def find_largest(dct, n):
+    return nlargest(n, dct.values())
+
+result = find_largest(my_dict, 3)
+
+# OR
+#for name, value in nlargest(3, my_dict.items(), key = itemgetter(1)):
+#    print(k, v)
+
+# 30.1
+# Task: Write a Python program to sort a dictionary of shop items by price in descending order and print the top three.
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+sorted_dict = dict(sorted(my_dict.items(), key = itemgetter(1), reverse = True))
+
+print(list(sorted_dict.items())[0:3])
+    
+# 30.2
+# Task: Write a Python program to use heapq.nlargest to extract the top three most expensive items from a dictionary.
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+result = nlargest(3, my_dict.items(), key = itemgetter(1))
+
+# 30.3
+# Task: Write a Python program to implement a function that returns the three highest-priced items from a shop inventory dictionary.
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+def priciest_items(dct, n = 1):
+    pricy_items = []
+    for k, v in list(nlargest(n, dct.items, key = lambda x: x[1])):
+        pricy_items.append(k)
+    
+    return pricy_items
+    
+
+# 30.4
+# Task: Write a Python program to iterate over a shop dictionary and output the top three key-value pairs based on value.
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+
+
+# 31.0
+# Task: Write a Python program to get the key, value and item in a dictionary. 
+
+# 31.1
+# Task: Write a Python program to iterate over a dictionary and print each key along with its value using items().
+
+# 31.2
+# Task: Write a Python program to generate a list of tuples containing key and value pairs from a dictionary.
+
+# 31.3
+# Task: Write a Python program to use a for-loop to display each dictionary item on a separate line in the format "key: value".
+
+# 31.4
+# Task: Write a Python program to create a function that returns all key, value pairs as a list of strings formatted as "key = value".
 
