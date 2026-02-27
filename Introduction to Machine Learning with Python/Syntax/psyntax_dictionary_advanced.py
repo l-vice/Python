@@ -1956,6 +1956,9 @@ def loop_list_conversion(lst):
     
 result = loop_list_conversion(my_list)
 
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 28.0
 # Task: Write a Python program to sort a list alphabetically in a dictionary.
@@ -2006,6 +2009,10 @@ my_dict = {'n1': [1, 2, 3], 'n2': [5, 11, 16], 'n3': [19, 11, 75], 'n4': [2, 6, 
 def sorted_dict(dct):
     return {k: sorted(v) for k, v in dct.items()}
 
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
 # 29.0
 # Task: Write a Python program to remove spaces from dictionary keys.
 my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
@@ -2043,18 +2050,29 @@ result = {k.translate({32: None}): v for k, v in my_dict.items()}
 # Task: Write a Python program to implement a function that cleans dictionary keys by removing spaces and special characters.
 my_dict = {"S 001": ['Math', 'Science'], 'S 002': ['Math', 'English']}
 
-def remove_characters(key):
-    return ''.join(filter(lambda c: c != ' ' or c not in punctuation, key))
+def filter_string(key):
+    return ''.join(filter(lambda c: c != ' ' and c not in punctuation, key))
+
+# OR
+def filter_string(key):
+    return ''.join(c for c in key if c.isalnum())
 
 def remove_specials(dct):
     out = {}
     for k, v in dct.items():
-        clean_key = ''.join(filter(lambda c: c != ' ' or c not in punctuation, k))
+        clean_key = filter_string(k)
         out[clean_key] = v
     
     return out
 
+def remove_specials(dct):
+    return {filter_string(k): v for k, v in dct.items()}
+
 result = remove_specials(my_dict)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 30.0
 # Task: Write a Python program to get the top three items in a shop. 
@@ -2073,9 +2091,7 @@ result = find_largest(my_dict, 3)
 # Task: Write a Python program to sort a dictionary of shop items by price in descending order and print the top three.
 my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
 
-sorted_dict = dict(sorted(my_dict.items(), key = itemgetter(1), reverse = True))
-
-print(list(sorted_dict.items())[0:3])
+result = sorted(my_dict.items(), key = itemgetter(1), reverse = True)[:3]
     
 # 30.2
 # Task: Write a Python program to use heapq.nlargest to extract the top three most expensive items from a dictionary.
@@ -2087,32 +2103,484 @@ result = nlargest(3, my_dict.items(), key = itemgetter(1))
 # Task: Write a Python program to implement a function that returns the three highest-priced items from a shop inventory dictionary.
 my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
 
-def priciest_items(dct, n = 1):
-    pricy_items = []
-    for k, v in list(nlargest(n, dct.items, key = lambda x: x[1])):
-        pricy_items.append(k)
+def most_pricy(dct, n = 1):
+    pricey_items = []
+    for k, v in list(nlargest(n, dct.items(), key = lambda x: x[1])):
+        pricey_items.append(k)
     
-    return pricy_items
+    return pricey_items
     
+result = most_pricy(my_dict, n = 3)
 
 # 30.4
 # Task: Write a Python program to iterate over a shop dictionary and output the top three key-value pairs based on value.
 my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
 
+result = {k: v for k, v in nlargest(3, my_dict.items(), key = lambda x: x[1])}
 
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
 
 # 31.0
 # Task: Write a Python program to get the key, value and item in a dictionary. 
+my_dict =  {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+#for count, (key, value) in enumerate(my_dict.items(), 1):
+#    print(count, key, value)
 
 # 31.1
 # Task: Write a Python program to iterate over a dictionary and print each key along with its value using items().
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+#for k, v in my_dict.items():
+#    print(k, v)
 
 # 31.2
 # Task: Write a Python program to generate a list of tuples containing key and value pairs from a dictionary.
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+def generate_tuples(dct):
+    result = []
+    for k, v in dct.items():
+        result.append((k, v))
+    
+    return result
+
+# OR
+def generate_tuples(dct):
+    return {(k, v) for k, v in dct.items()}
+
+# OR
+def generate_tuples(dct):
+    return list(dct.items())
+
+result = generate_tuples(my_dict)
 
 # 31.3
 # Task: Write a Python program to use a for-loop to display each dictionary item on a separate line in the format "key: value".
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
+
+#for k, v in my_dict.items():
+#    print(f"{k}: {v}")
 
 # 31.4
 # Task: Write a Python program to create a function that returns all key, value pairs as a list of strings formatted as "key = value".
+my_dict = {'item1': 166, 'item2': 421, 'item3': 3.1, 'item4': 531, 'item5': 531, 'item6': 6883, 'item7': 3218, 'item8': 412.33}
 
+def generate_list(dct):
+    string_list = []
+    for k, v in dct.items():
+        string_list.append(f"{k} = {v}")
+    
+    return string_list
+
+result = generate_list(my_dict)
+
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+# ------------------------------------------------------------------------ ##################################################################### ------------------------------------------------------------------ #
+
+# 32.0
+# Task: Write a Python program to print a dictionary line by line.
+my_dict = {'Nick': {'class': 'V', 'roll_id': 2}, 'Steven': {'class': 'V', 'roll_id': 3}}
+
+#for k in my_dict:
+#    print(k)
+#    for v in my_dict[k]:
+#        print(v, ':', my_dict[k][v])
+
+# 32.1
+# Task: Write a Python program to print each key-value pair in a dictionary on a separate line.
+my_dict = {'Nick': {'class': 'V', 'roll_id': 2}, 'Steven': {'class': 'V', 'roll_id': 3}}
+
+#for name in my_dict:
+#    print(name)
+#    for clss, rid in my_dict[k].items():
+#       print((clss, rid))
+
+# 32.2
+# Task: Write a Python program to format and print a dictionary so that each line shows a key and its corresponding value.
+my_dict = {'Nick': {'class': 'V', 'roll_id': 2}, 'Steven': {'class': 'V', 'roll_id': 3}}
+
+#for name in my_dict.items():
+#    for clss, rid in my_dict[k].items():
+#        print([clss, rid])
+        
+        
+# 32.3
+# Task: Write a Python program to iterate over a dictionary and output its items line by line using f-strings.
+my_dict = {'Nick': {'class': 'V', 'roll_id': 2}, 'Steven': {'class': 'V', 'roll_id': 3}}
+
+#for name in my_dict:
+#    print(name)
+#    for k, v in my_dict[name].items():
+#        print((k, v))
+
+# 32.4
+# Task: Write a Python program to display a dictionary in a multi-line format with each item on its own line.
+my_dict = {'Nick': {'class': 'V', 'roll_id': 2}, 'Steven': {'class': 'V', 'roll_id': 3}}
+
+#for item in my_dict.items():
+#    print(item)
+ 
+# 33.0 
+# Task: Write a Python program to check if multiple keys exist in a dictionary.
+my_dict = {'name': 'Alex', 'class': 'V', 'roll_id': '2'}
+
+#print(my_dict.keys() >= {'name', 'class'})
+
+# 33.1
+# Task: Write a Python program to verify if a list of keys are all present in a dictionary.
+my_dict = {'name': 'Alex', 'class': 'V', 'roll_id': '2'}
+keys = ['name', 'class']
+
+result = all(k in keys for k in my_dict.keys())
+
+# 33.2
+# Task: Write a Python program to use all() with a list comprehension to check for multiple keys in a dictionary.
+my_dict = {'name': 'Alex', 'class': 'V', 'roll_id': '2'}
+
+result = all(k in keys for k in ['name', 'class', 'roll_id'])
+
+# 33.3
+# Task: Write a Python program to implement a function that returns True if every key in a given list exists in the dictionary.
+my_dict = {'name': 'Alex', 'class': 'V', 'roll_id': '2'}
+keys = ['name', 'blaard', 'sect']
+
+result = lambda dct, kys: all(k in kys for k in dct.keys())
+
+# 33.4
+# Task: Write a Python program to compare the keys of a dictionary with a given set and output whether all specified keys are found.
+my_dict = {'name': 'Alex', 'class': 'V', 'roll_id': '2'}
+my_set = {'name', 'class', 'roll_id'}
+
+result = all(k in my_set for k in my_dict.keys())
+
+# 34.0
+# Task: Write a Python program to sort Counter by value.
+my_dict = {'Math': 81, 'Physics': 83, 'Chemistry': 87}
+
+result = Counter(my_dict)
+
+# 34.1
+# Task: Write a Python program to sort a dictionary (or Counter) by its values in descending order and output a list of tuples.
+my_dict = {'Math': 81, 'Physics': 83, 'Chemistry': 87, 'Biology': 84, 'Computer Science': 112}
+
+result_counter = tuple(Counter(my_dict.values()).most_common())
+
+result = tuple(sorted(my_dict.values(), reverse=True))
+
+# 34.2
+# Task: Write a Python program to use sorted() with a lambda function to arrange the items of a Counter based on frequency.
+my_dict = {'Math': 81, 'Physics': 83, 'Chemistry': 87, 'Biology': 87, 'Computer Science': 112}
+
+freq_tbl = Counter(my_dict.items())
+
+result = sorted(freq_tbl.items(), key = lambda x: x[1])
+
+# 34.3
+# Task:
+
+# 34.4
+# Task: 
+
+# 35.0
+# Task:
+my_dict = {'Math': 11, 'Physics': 26,
+           'Engineering':66, 'Biology': 76}
+
+my_counter = Counter(my_dict)
+
+# Solution
+my_counter.most_common()
+
+# 35.1
+# Task: Write a Python program to sort a dictionary (or Counter) by its values in descending order and output a list of tuples.
+my_dict = {'Math': 11, 'Physics': 26,
+           'Engineering':66, 'Biology': 76}
+           
+result = list(sorted(my_dict.items(), key = itemgetter(1), reverse = True))
+
+# 35.2
+# Task: Write a Python program to use sorted() with a lambda function to arrange the items of a Counter based on frequency.
+my_list = ['Biology', 'Math', 'Physics', 'Engineering', 'Chemistry',
+           'Sociology', 'Biology', 'Physics', 'Physics']
+ 
+result = list(sorted(Counter(my_list).items(), key = lambda x: x[1]))
+result
+# 35.3
+# Task: Write a Python program to implement a function that takes a Counter object and returns its items sorted by value.
+my_counter = Counter(my_list)
+
+result = lambda cntr: cntr.most_common()
+result(my_counter)
+
+# 35.4
+# Task: Write a Python program to compare sorting a Counter by keys versus sorting by values and display the differences.
+my_list = ['Biology', 'Math', 'Physics', 'Engineering', 'Chemistry',
+           'Sociology', 'Biology', 'Physics', 'Physics']
+my_counter = Counter(my_list)
+
+sorted_by_keys = sorted(my_counter.items(), key = itemgetter(0))
+sorted_by_values = sorted(my_counter.items(), key = itemgetter(1))
+
+result = sorted_by_keys == sorted_by_values
+#print(f"Sorted by keys: {sorted_by_keys}\n\nSorted by values: {sorted_by_values}\n\nResult: {result}")
+
+# 36.0
+# Task: Write a Python program to create a dictionary from two lists without losing duplicate values.
+my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII']
+my_list2 = [1, 2, 2, 3]
+# Method 1: Classic dictionary
+out = {}
+for k, v in zip(my_list1, my_list2):
+    out[k] = v
+   
+# Method 2: Defaultdict
+out = defaultdict(set)
+
+for k, v in zip(my_list1, my_list2):
+    out[k].add(v)
+
+out
+
+# 36.1
+# Task: Write a Python program to convert two lists into a dictionary where keys map to a set of values to preserve duplicates.
+my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII']
+my_list2 = [1, 2, 2, 3]
+
+out = {}
+
+for k, v in zip(my_list1, my_list2):
+    out[k] = {v}
+
+out
+
+# 36.2
+# Task: Write a Python program to use collections.defaultdict(set) to merge two lists into a dictionary without losing duplicate values.
+my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII']
+my_list2 = [1, 2, 2, 3]
+
+out = defaultdict(set)
+
+for k, v in zip(my_list1, my_list2):
+    out[k].add(v)
+   
+# 36.3
+# Task: Write a Python program to iterate over two lists and store duplicate values in a set within the dictionary for each key.
+my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII', 'Class-VIII', 'Class-VII', 'Class-VI']
+my_list2 = [1, 2, 2, 3, 6, 2, 1]
+
+# Method 1:
+out = defaultdict(set)
+
+for k, v in zip(my_list1, my_list2):
+    out[k].add(v)
+
+# Method 2:
+out = {}
+for k, v in zip(my_list1, my_list2):
+    if k not in out:
+        out[k] = set()
+    out[k].add(v)
+
+out
+# 36.4
+# Task: Write a Python program to implement a function that creates a dictionary from two lists, ensuring duplicate values are stored in a list or set.
+my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII', 'Class-VIII', 'Class-VII', 'Class-VI']
+my_list2 = [1, 2, 2, 3, 6, 2, 1]
+
+def merge_lists(l1, l2):
+    out = defaultdict(set)
+    lists = zip(l1, l2)
+   
+    for k, v in lists:
+        out[k].add(v)
+   
+    return out
+
+result = merge_lists(my_list1, my_list2)
+result
+
+# 37.0
+# Task: Write a Python program to match key values in two dictionaries.
+my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
+my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
+
+#for (key, value) in set(my_dict1.items() & my_dict2.items()):
+#    print(list((key, value)))
+
+# 37.1
+# Task: Write a Python program to compare two dictionaries
+# and print the keys whose values match in both.
+my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
+my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
+
+#for (k, v) in set(my_dict1.items() & my_dict2.items()):
+#    print(list(k))
+
+# 37.2
+# Task: Write a Python program to iterate over keys in one dictionary
+# and check if the corresponding value in another dictionary is the same.
+my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
+my_dict2 = {'a': 8, 'b': 3, 'c': 21, 'd': 18, 'e': 12, 'f': 22}
+
+result = any((k, v) in my_dict2.items() for (k, v) in my_dict1.items())
+
+# 37.3
+# Task: Write a Python program to use set intersection on the keys
+# of two dictionaries and then verify matching values for each intersected key.
+my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12, 'g': 14}
+my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
+
+common_keys = set(my_dict1.keys()).intersection(my_dict2.keys())
+
+out = {}
+
+for k in common_keys:
+    if my_dict1[k] == my_dict2[k]:
+        out[k] = my_dict1[k]
+
+out
+
+# 37.4
+# Task: Write a Python program to implement a function that finds
+# all keys present in both dictionaries where the
+# values are equal, and print them with their common value.        
+my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12, 'g': 14}
+my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
+
+def kv_intersection(d1, d2):
+    out = {}
+    common_keys = d1.keys() & d2.keys()
+   
+    for k in common_keys:
+        if d1[k] == d2[k]:
+            out[k] = d1[k]
+   
+    return out
+
+result = kv_intersection(my_dict1, my_dict2)
+
+# 38.0
+# Task: Write a Python program to store dictionary data in a JSON file.
+d = {
+    "students": [
+        {"firstName": "Nikki", "lastName": "Roysden"},
+        {"firstName": "Mervin", "lastName": "Friedland"},
+        {"firstName": "Aron", "lastName": "Wilkins"}
+    ],
+    "teachers": [
+        {"firstName": "Amberly", "lastName": "Dober"},
+        {"firstName": "Regine", "lastName": "Crowder"}
+    ]
+}
+
+#with open("dictionary", "w") as f:
+#    json.dump(d, f, indent = 4, sort_keys = True)
+#    
+#print("\nJson file to dictionary:")
+#
+#with open('dictionary') as f:
+#    data = json.load(f)
+
+# 38.1
+# Task:
+d = {
+    "students": [
+        {"firstName": "Nikki", "lastName": "Roysden"},
+        {"firstName": "Mervin", "lastName": "Friedland"},
+        {"firstName": "Aron", "lastName": "Wilkins"}
+    ],
+    "teachers": [
+        {"firstName": "Amberly", "lastName": "Dober"},
+        {"firstName": "Regine", "lastName": "Crowder"}
+    ]
+}
+
+#with open("dictionary", "w") as f:
+#    json.dump(d, f, indent = 4, sort_keys = True)
+
+#print("\nJson file to dictionary: ")
+
+#with open("dictionary") as f:
+#    data = json.load(f)
+   
+# 38.2
+# Task:
+my_dict = {'name': 'Miklo', 'age': 25,
+           'skills': ['Python', 'R', 'C++'],
+           'active': True}
+
+# Convert to JSON string
+#json_string = json.dumps(data)
+
+# OR
+with open("data.json", "w") as f:
+    json.dump(my_dict, f, indent=4)
+# Load back and print
+with open("data.json") as f:
+    data = json.load(f)
+
+# 38.3
+# Task:
+my_dict = {'name': 'Miklo', 'age': 25,
+           'skills': ['Python', 'R', 'C++'],
+           'active': True}
+           
+#try:
+#    with open("data.json", "w") as f:
+#        json.dump(my_dict, f, indent = 4, sort_keys = False)
+#    print("File saved successfully.")
+#except TypeError as e:
+#    print("Serialization error:", e)
+#except OSError as e:
+#    print("File error: ", e)
+
+# 38.4
+# Task:
+
+with open("data.json", "r") as f:
+    data = json.load(f)
+
+#for k, v in data.items():
+#    print(f"{k:<10}: {v}")
+
+# 39.0
+# Task:
+my_dict = dict(x = list(range(11, 20)), y = list(range(21, 30)), z = list(range(31, 40)))
+#pprint(my_dict)
+
+#for k, v in my_dict.items():
+#    print(f"{k:<10}: {v}")
+
+# 39.1
+# Task:
+my_dict = dict(x = list(range(1, 11)), y = list(range(11, 21)),
+               z = list(range(21, 31)))
+#pprint(my_dict)
+
+# 39.2
+# Task:
+my_dict = dict(x = list(range(11, 21)), y = list(range(21, 31)), z = list(range(31, 41)))
+#pprint(my_dict)
+# print("\nThe fifth element: ")
+# print(f"Key['x']: {my_dict['x'][4]}\nKey['y']: {my_dict['y'][4]}\nKey['z']: {my_dict['z'][4]}")
+
+# 39.3
+# Task:
+my_dict = {}
+user_specified_keys = list(input("Please enter your keys of choice: "))
+user_specified_keys = list(filter(lambda x: x.isalpha(), user_specified_keys))
+
+for k in range(len(user_specified_keys)):
+    pair = {user_specified_keys[k]: [i*(k+1) for i in list(range(11, 21))]}
+    my_dict.update(pair)
+
+for k in my_dict:
+    print(f"{my_dict[k][3]}")
+
+# 39.4
+# Task: 
+keys = ['x', 'y', 'z']
