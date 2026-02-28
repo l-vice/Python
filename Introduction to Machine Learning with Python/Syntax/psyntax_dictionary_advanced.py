@@ -2583,4 +2583,3 @@ for k in my_dict:
 
 # 39.4
 # Task: 
-keys = ['x', 'y', 'z']
