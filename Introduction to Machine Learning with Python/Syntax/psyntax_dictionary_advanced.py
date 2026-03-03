@@ -2549,37 +2549,374 @@ with open("data.json", "r") as f:
 
 # 39.0
 # Task:
-my_dict = dict(x = list(range(11, 20)), y = list(range(21, 30)), z = list(range(31, 40)))
-#pprint(my_dict)
-
-#for k, v in my_dict.items():
-#    print(f"{k:<10}: {v}")
 
 # 39.1
 # Task:
-my_dict = dict(x = list(range(1, 11)), y = list(range(11, 21)),
-               z = list(range(21, 31)))
-#pprint(my_dict)
 
 # 39.2
 # Task:
-my_dict = dict(x = list(range(11, 21)), y = list(range(21, 31)), z = list(range(31, 41)))
-#pprint(my_dict)
-# print("\nThe fifth element: ")
-# print(f"Key['x']: {my_dict['x'][4]}\nKey['y']: {my_dict['y'][4]}\nKey['z']: {my_dict['z'][4]}")
+
 
 # 39.3
 # Task:
-my_dict = {}
-user_specified_keys = list(input("Please enter your keys of choice: "))
-user_specified_keys = list(filter(lambda x: x.isalpha(), user_specified_keys))
-
-for k in range(len(user_specified_keys)):
-    pair = {user_specified_keys[k]: [i*(k+1) for i in list(range(11, 21))]}
-    my_dict.update(pair)
-
-for k in my_dict:
-    print(f"{my_dict[k][3]}")
 
 # 39.4
 # Task: 
+
+
+# 40.0
+# Task: Write a Python program to create a dictionary of keys x, y, and z where
+# each key has as value a list from 11-20, 21-30, and 31-40 respectively. Access the fifth value of each key from the dictionary.
+
+my_dict = dict(x = list(range(11, 20)), y = list(range(21, 30)), z = list(range(31, 40)))
+
+# 40.1
+# Task: Write a Python program to create a dictionary with keys 'x', 'y', and 'z'
+# and assign each key a list of consecutive integers within specified ranges.
+my_dict = {'x': list(range(1, 21)), 'y': list(range(21, 31)), 'z': list(range(31, 41))}
+
+# 40.2
+# Task: Write a Python program to generate a dictionary where key 'x' contains
+# numbers 11–20, 'y' contains 21–30, and 'z' contains 31–40, then print the fifth element of each list.
+my_dict = {'x': list(range(1, 21)), 'y': list(range(21, 31)), 'z': list(range(31, 41))}
+
+# Fifth element
+#print(f"{my_dict}\n")
+#for k in my_dict:
+#    print(my_dict[k][5])
+
+# 40.3
+# Task: Write a Python program to dynamically generate a dictionary with keys
+# based on user input and list values as ranges, then access a specific index from each list.
+user_input_keys = list(input("Please enter up to three keys: "))
+user_input_keys = list(filter(lambda x: x.isalpha() or x.isdigit(), user_input_keys))
+
+out = {}
+for k in range(0, len(user_input_keys)):
+    out.update({user_input_keys[k]: list(range(1, 22, k+1))})
+
+# 40.4
+# Task: Write a Python program to implement a function that builds a nested
+# dictionary with keys 'x', 'y', 'z' mapping to lists of numbers and returns selected elements from each.
+keys = ['x', 'y', 'z']
+
+def build_nested_dict(kys, ele):
+    out = dict()
+    for k in range(len(kys)):
+        out.update({kys[k]: {f'item{k+1}': list(range(1, 15, k+1))}})
+   
+    elements = []
+   
+    for k in out:
+        for values in out[k].values():
+            elements.append(values[ele])
+   
+    return elements
+
+result = build_nested_dict(keys, 2)
+
+
+# 41.0
+# Task: Write a Python program to drop empty items from a given dictionary.
+my_dict = {'c1': 'Red', 'c2': 'Green', 'c3': None}
+
+#result = {k: v for k, v in my_dict.items() if v is not None}
+
+# 41.1
+# Task: Write a Python program to remove keys with values that are None, empty
+# strings, or empty lists from a dictionary using dictionary comprehension.
+my_dict = {'c1': 'Red', 'c2': 'Green', 'c3': None, 'c4': "", 'c5': []}
+eliminate = [None, "", []]
+
+result = {k: v for k, v in my_dict.items() if v not in eliminate}
+result
+
+# 41.2
+# Task: Write a Python program to filter out false values
+# (e.g., None, "", [], {}) from a dictionary and return a new dictionary.
+my_dict = {'c1': 'Red', 'c2': 'Green', 'c3': None, 'c4': "", 'c5': [], 'c6': {}}
+
+out = {}
+for k, v in my_dict.items():
+    if v not in [None, "", [], {}]:
+        out[k] = v
+
+# 41.3
+# Task: Write a Python function to recursively drop empty items from a nested
+# dictionary.
+my_dict = {'item1': {'c1': 'Red'}, 'item2': {'c2': 'Green'}, 'item3': {'c3': None}, 'item4': {'c4': ""}, 'item5': {'c5': []}, 'item6': {'c6': {}}}
+invalid = [None, "", [], {}]
+
+def del_empty(d, inv):
+    if not isinstance(d, dict):
+        return d
+   
+    out = {}
+   
+    for k, v in d.items():
+        if isinstance(v, dict):
+            nested = del_empty(v, inv)
+            if nested:
+                out[k] = nested
+        else:
+            if v not in inv:
+                out[k] = v
+   
+    return out
+
+result = del_empty(my_dict, invalid)
+
+# 41.4
+# Task: Write a Python program to iterate over a dictionary and remove keys
+# whose values evaluate to False.
+my_dict = {'c1': 'Red', 'c2': 'Green', 'c3': None, 'c4': False, 'c5': [], 'c6': {}}
+
+def remove_false(d):
+    if not isinstance(d, dict):
+        return d
+   
+    out = {}
+   
+    for k, v in d.items():
+        if isinstance(v, dict):
+            nested = remove_false(v)
+            if nested:
+                out[k] = nested
+        else:
+            if v:
+                out[k] = v
+           
+    return out
+
+result = remove_false(my_dict)
+
+# 42.0
+# Task: Write a Python program to filter a dictionary based on values.
+my_dict = {'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190}
+
+result = {k: v for k, v in my_dict.items() if v >= 178}
+
+# 42.1
+# Task: Write a Python program to filter a dictionary and return only those
+# entries where the value exceeds a given threshold.
+my_dict = {'Cierra Vega': 175, 'Alden Cantrell': 160}
+
+result = dict(filter(lambda x: x[1] >= 170, my_dict.items()))
+print(result)
+
+# 42.2
+# Task: Write a Python program to use a lambda function in dictionary
+# comprehension to keep only key-value pairs satisfying a condition.
+my_dict = {'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190}
+
+result = dict(filter(lambda x: x[0] == 'Alden Cantrell' and x[1] == 180, my_dict.items()))
+# OR
+result = {k: v for k, v in my_dict.items() if k == 'Alden Cantrell' and v == 180}
+
+# 42.3
+# Task: Write a Python program to create a new dictionary by removing entries
+# whose values do not meet a specified predicate.
+my_dict = {'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190}
+
+out = {}
+for k, v in my_dict.items():
+    if v >= 176:
+        out[k] = v
+
+print(out)
+
+# 42.4
+# Task: Write a Python function to filter a dictionary based on a dynamic
+# condition provided as a parameter.
+my_dict = {'Cierra Vega': 175, 'Alden Cantrell': 180, 'Kierra Gentry': 165, 'Pierre Cox': 190}
+
+def rm_dynamic(d, condition):
+    return {k: v for k, v in d.items() if condition(k, v)}
+
+result = rm_dynamic(my_dict, ('Cierra Vega', 175))
+
+Il giorno ven 27 feb 2026 alle ore 19:09 LUKA BOJOVIC <l.bojovic@lumsastud.it> ha scritto:
+
+    from collections import Counter, defaultdict
+    from operator import itemgetter
+    from pprint import pprint
+    import json
+    # 35.0
+    # Task:
+    my_dict = {'Math': 11, 'Physics': 26,
+               'Engineering':66, 'Biology': 76}
+
+    my_counter = Counter(my_dict)
+
+    # Solution
+    my_counter.most_common()
+
+# 43.0
+# Task: Write a Python program to convert more than
+# list to a nested dictionary.
+student_id = ["S001", "S002", "S003", "S004"]
+student_name = ["Adina Park", "Leyton Marsh", "Duncan Boyle", "Saim Richards"]
+student_grade = [85, 98, 89, 92]
+
+out = {}
+for k, v1, v2 in zip(student_id, student_name, student_grade):
+        out[k] = {v1: v2}
+
+# OR
+result = {k: {v1: v2} for k, v1, v2 in zip(student_id, student_name, student_grade)}
+
+# 43.1
+# Task: Write a Python program to merge three
+# lists into a list of nested dictionaries using zip() and list comprehension.
+student_id = ["S001", "S002", "S003", "S004"]
+student_name = ["Peter Park", "Leyton Marsh", "Duncan Boyle", "Donald Richards"]
+student_grade = [85, 98, 89, 92]
+
+result = [{k: {v1: v2}} for k, v1, v2 in zip(student_id, student_name, student_grade)]
+
+# 43.2
+# Task: Write a Python function that takes three
+# parallel lists (IDs, names, scores) and returns a nested dictionary for each item.
+student_id = ["S001", "S002", "S003", "S004"]
+student_name = ["Peter Park", "Leyton Marsh", "Duncan Boyle", "Donald Richards"]
+student_grade = [85, 98, 89, 99]
+
+def compress_lst(id_lst1, id_lst2, id_lst3):
+    return {k: {v1: v2} for k, v1, v2 in zip(id_lst1, id_lst2, id_lst3)}
+   
+result = compress_lst(student_id, student_name, student_grade)
+
+# 43.3
+# Task: Write a Python program to convert multiple lists into a nested
+# dictionary where each outer key maps to a dictionary of inner key-value pairs.
+student_id = ["S001", "S002", "S003", "S004"]
+student_name = ["Peter Park", "Leyton Marsh", "Duncan Boyle", "Donald Richards"]
+student_grade = [85, 98, 89, 99]
+
+result = {k: {v1: v2} for (k, v1, v2) in zip(student_id, student_name, student_grade)}
+
+# 43.4
+# Task: Write a Python program to build a nested.
+# dictionary from several lists while ensuring proper pairing of elements.
+student_id = ["S001", "S002", "S003", "S004"]
+student_name = ["Peter Park", "Leyton Marsh", "Duncan Boyle", "Donald Richards"]
+student_grade = [85, 98, 89, 99]
+
+def compress_lst(l1, l2, l3):
+    if not len(l1) == len(l2) == len(l3):
+        raise ValueError("All lists must have the same length.")
+   
+    out = {}
+    for k, v1, v2 in zip(l1, l2, l3):
+        out[k] = {v1: v2}
+           
+    return out
+
+result = compress_lst(student_id, student_name, student_grade)
+
+# 44.0
+# Task: Write a Python program to filter the height and width of students,
+# which are stored in a dictionary.
+my_dict = {
+    'Cierra Vega': (6.2, 70),
+    'Michael Cantrell': (5.9, 65),
+    'Kierra Gentry': (6.0, 68),
+    'Pierre Cox': (6.3, 66)
+}
+
+def find_hw(d, height, width):
+    return dict(filter(lambda x: x[1][0] > height and x[1][1] > width, d.items()))
+
+result = find_hw(my_dict, 6, 65)
+result
+
+# 44.1
+# Task: Write a Python program to filter a dictionary of student names
+# and (height, weight) tuples and return only those meeting specified thresholds.
+my_dict = {
+    'Cierra Vega': (6.2, 70),
+    'Michael Cantrell': (5.9, 65),
+    'Kierra Gentry': (6.0, 68),
+    'Pierre Cox': (6.3, 66)
+}
+
+height = 6
+weight = 65
+
+out = {}
+
+for k, v in my_dict.items():
+    if v[0] > height and v[1] > weight:
+        out[k] = v        
+
+# 44.2
+# Task: Write a Python program to use dictionary comprehension to extract
+# student entries with height greater than 6.0 ft and weight over 70 kg.
+my_dict = {
+    'Cierra Vega': (6.2, 70),
+    'Michael Cantrell': (5.9, 65),
+    'Kierra Gentry': (6.0, 68),
+    'Pierre Cox': (6.3, 66),
+    'Luke Vice': (6.6, 110)
+}
+
+def find_hw(d, height, weight):
+    return dict(filter(lambda x: x[1][0] > height and x[1][1] > weight, d.items()))
+
+result = find_hw(my_dict, 6, 70)
+
+# 44.3
+# Task: Write a Python program to iterate over a dictionary and select
+# keys where both the height and weight satisfy given conditions.
+my_dict = {
+    'Cierra Vega': (6.2, 70),
+    'Michael Cantrell': (5.9, 65),
+    'Kierra Gentry': (6.0, 68),
+    'Pierre Cox': (6.3, 66)
+}
+
+def find_hw(d, height, weight):
+    return dict(filter(lambda x: x[1][0] > height or x[1][1] > weight, d.items()))
+   
+result = find_hw(my_dict, 6.1, 70)
+
+# 44.4
+# Task: Write a Python function that takes a dictionary of
+# (height, weight) pairs and returns a new dictionary with only the valid entries.
+my_dict = {
+    'Cierra Vega': (6.2, 70),
+    'Michael Cantrell': (5.9, 65),
+    'Kierra Gentry': (6.0, 68),
+    'Pierre Cox': (6.3, 66),
+    'Luke Vice': (6.6, 110)
+}
+
+result = lambda h, w: dict(filter(lambda x: x[1][0] > h and x[1][1] > w, my_dict.items()))
+
+result(6, 70)
+
+# 45.0
+# Task: Write a Python program to verify that all values
+# in a dictionary are the same.
+my_dict = {'Mike': 12, 'Steve': 12, 'Rick': 12, 'John': 12, 'Irving': 12}
+
+# Method 1: Loop
+
+def check_if_all_same(d):
+    values = list(d.values())
+   
+    for i in range(len(values)):
+        for j in range(i+1, len(values)):
+            if values[j] != values[i]:
+                return False
+   
+    return True
+
+# Method 2:
+
+def check_if_all_same(d):
+    t = list(d.values())[0]
+   
+    return all(v == t for v in d.values())
+
+result = check_if_all_same(my_dict)
