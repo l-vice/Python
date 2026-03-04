@@ -2385,7 +2385,6 @@ for k, v in zip(my_list1, my_list2):
         out[k] = set()
     out[k].add(v)
 
-out
 # 36.4
 # Task: Write a Python program to implement a function that creates a dictionary from two lists, ensuring duplicate values are stored in a list or set.
 my_list1 = ['Class-V', 'Class-VI', 'Class-VII', 'Class-VIII', 'Class-VIII', 'Class-VII', 'Class-VI']
@@ -2404,6 +2403,121 @@ result = merge_lists(my_list1, my_list2)
 result
 
 # 37.0
+# Task: Write a Python program to replace dictionary values with their sums.
+my_dict = [
+  {'id': 1, 'subject': 'math', 'V': 70, 'VI': 82},
+  {'id': 2, 'subject': 'math', 'V': 73, 'VI': 74},
+  {'id': 3, 'subject': 'math', 'V': 75, 'VI': 86}
+]
+
+def add_cells(lst):
+    for d in lst:
+        # Extract and remove 'V' and  'VI' values in a dictionary.
+        n1 = d.pop('V')
+        n2 = d.pop('VI')
+       
+        d['V + VI'] = n1+n2
+   
+    return lst
+
+result = add_cells(my_dict)
+
+# 37.1
+# Task: Write a Python program to update a dictionary so that each key's value
+# becomes the sum of its original value and another corresponding value from a second dictionary.
+my_dict1 = {'a': 12, 'b': 16, 'c': 24}
+my_dict2 = {'d': 16, 'e': 24, 'f': 40}
+
+def sum_vals(d1, d2):
+    for k, v in zip(d1.keys(), d2.values()):
+        d1[k] += v
+    return d1
+
+result = sum_vals(my_dict1, my_dict2)
+
+# 37.2
+# Task: Write a Python program to iterate over a dictionary and
+# replace each value with the sum of the digits of that value.
+my_dict = {'a': 12, 'b': 16, 'c': 24}
+
+def sum_digits(d):
+    for k, v in d.items():
+        d[k] = sum(map(int, reduce(lambda a, b: a+b, str(v))))
+   
+    return d
+       
+result = sum_digits(my_dict)
+pprint(result)
+
+# 37.3
+# Task: Write a Python program to merge a dictionary with itself by
+# summing values that share the same key after a transformation.
+my_dict = {'a': 12, 'b': 16, 'c': 24, 'A': 40, 'B': 73, 'C': 136}
+
+def merge_vals(d, trans):
+    out = {}
+   
+    for k, v in d.items():
+        new_key = trans(k)
+       
+        if new_key in out:
+            out[new_key] += v
+        else:
+            out[new_key] = v
+   
+    return out
+
+# OR
+def merge_vals(d, trans):
+    out = defaultdict(int)
+   
+    for k, v in d.items():
+        out[trans(k)] += v
+   
+    return dict(out)
+
+result = merge_vals(my_dict, str.lower)
+
+# OR
+def merge_vals(d, key_fn, val_fn):
+    out = {}
+   
+    for k, v in d.items():
+        nk = key_fn(k)
+        nv = val_fn(v)
+       
+        if isinstance(nv, Real) and not isinstance(nv, bool):
+            out[nk] = out.get(nk, 0) + nv
+   
+    return out
+
+key_fn = lambda s: s.strip().lower()
+val_fn = lambda x: float(x) if isinstance(x, str) and x.replace('.', '', 1).isdigit() else x
+
+result = merge_vals(my_dict, key_fn, val_fn)
+
+# 37.4
+# Task: Write a Python program to implement a function that takes a
+# dictionary and returns a new dictionary with each value replaced by its cumulative sum with other values.
+my_dict = {'a': 12, 'b': 16, 'c': 24}
+
+# Method 1: Loop
+def accumulate_vals(d):
+    out = {}
+    running_sum = 0
+    for k, v in d.items():
+        running_sum +=v
+        out[k] = running_sum
+   
+    return out
+
+# Method 2: Itertools accumulate
+def accumulate_vals(d):
+    return dict(zip(d.keys(), accumulate(d.values())))
+
+accumulate_vals(my_dict)
+
+# 38.0
 # Task: Write a Python program to match key values in two dictionaries.
 my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
 my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
@@ -2411,7 +2525,7 @@ my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
 #for (key, value) in set(my_dict1.items() & my_dict2.items()):
 #    print(list((key, value)))
 
-# 37.1
+# 38.1
 # Task: Write a Python program to compare two dictionaries
 # and print the keys whose values match in both.
 my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
@@ -2420,7 +2534,7 @@ my_dict2 = {'a': 8, 'b': 3, 'c': 11, 'd': 18, 'e': 12, 'f': 22}
 #for (k, v) in set(my_dict1.items() & my_dict2.items()):
 #    print(list(k))
 
-# 37.2
+# 38.2
 # Task: Write a Python program to iterate over keys in one dictionary
 # and check if the corresponding value in another dictionary is the same.
 my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12}
@@ -2428,7 +2542,7 @@ my_dict2 = {'a': 8, 'b': 3, 'c': 21, 'd': 18, 'e': 12, 'f': 22}
 
 result = any((k, v) in my_dict2.items() for (k, v) in my_dict1.items())
 
-# 37.3
+# 38.3
 # Task: Write a Python program to use set intersection on the keys
 # of two dictionaries and then verify matching values for each intersected key.
 my_dict1 = {'a': 2, 'b': 3, 'c': 11, 'd': 15, 'e': 17, 'f': 12, 'g': 14}
@@ -2444,7 +2558,7 @@ for k in common_keys:
 
 out
 
-# 37.4
+# 38.4
 # Task: Write a Python program to implement a function that finds
 # all keys present in both dictionaries where the
 # values are equal, and print them with their common value.        
@@ -2463,7 +2577,7 @@ def kv_intersection(d1, d2):
 
 result = kv_intersection(my_dict1, my_dict2)
 
-# 38.0
+# 39.0
 # Task: Write a Python program to store dictionary data in a JSON file.
 d = {
     "students": [
@@ -2485,7 +2599,7 @@ d = {
 #with open('dictionary') as f:
 #    data = json.load(f)
 
-# 38.1
+# 39.1
 # Task:
 d = {
     "students": [
@@ -2507,7 +2621,7 @@ d = {
 #with open("dictionary") as f:
 #    data = json.load(f)
    
-# 38.2
+# 39.2
 # Task:
 my_dict = {'name': 'Miklo', 'age': 25,
            'skills': ['Python', 'R', 'C++'],
@@ -2523,7 +2637,7 @@ with open("data.json", "w") as f:
 with open("data.json") as f:
     data = json.load(f)
 
-# 38.3
+# 39.3
 # Task:
 my_dict = {'name': 'Miklo', 'age': 25,
            'skills': ['Python', 'R', 'C++'],
@@ -2538,7 +2652,7 @@ my_dict = {'name': 'Miklo', 'age': 25,
 #except OSError as e:
 #    print("File error: ", e)
 
-# 38.4
+# 39.4
 # Task:
 
 with open("data.json", "r") as f:
@@ -2546,23 +2660,6 @@ with open("data.json", "r") as f:
 
 #for k, v in data.items():
 #    print(f"{k:<10}: {v}")
-
-# 39.0
-# Task:
-
-# 39.1
-# Task:
-
-# 39.2
-# Task:
-
-
-# 39.3
-# Task:
-
-# 39.4
-# Task: 
-
 
 # 40.0
 # Task: Write a Python program to create a dictionary of keys x, y, and z where
@@ -2735,22 +2832,6 @@ def rm_dynamic(d, condition):
 
 result = rm_dynamic(my_dict, ('Cierra Vega', 175))
 
-Il giorno ven 27 feb 2026 alle ore 19:09 LUKA BOJOVIC <l.bojovic@lumsastud.it> ha scritto:
-
-    from collections import Counter, defaultdict
-    from operator import itemgetter
-    from pprint import pprint
-    import json
-    # 35.0
-    # Task:
-    my_dict = {'Math': 11, 'Physics': 26,
-               'Engineering':66, 'Biology': 76}
-
-    my_counter = Counter(my_dict)
-
-    # Solution
-    my_counter.most_common()
-
 # 43.0
 # Task: Write a Python program to convert more than
 # list to a nested dictionary.
@@ -2896,8 +2977,7 @@ result = lambda h, w: dict(filter(lambda x: x[1][0] > h and x[1][1] > w, my_dict
 result(6, 70)
 
 # 45.0
-# Task: Write a Python program to verify that all values
-# in a dictionary are the same.
+# Task: Write a Python program to verify that all values in a dictionary are the same.
 my_dict = {'Mike': 12, 'Steve': 12, 'Rick': 12, 'John': 12, 'Irving': 12}
 
 # Method 1: Loop
@@ -2920,3 +3000,163 @@ def check_if_all_same(d):
     return all(v == t for v in d.values())
 
 result = check_if_all_same(my_dict)
+
+# 45.1
+# Task: Write a Python program to check if all values in a
+# dictionary are identical using set conversion.
+my_dict = {'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12}
+
+result = len(set(my_dict.values())) == 1  
+
+# 45.2
+# Task: Write a Python program to implement an all() based check
+# that verifies if every dictionary value equals the first value.
+my_dict = {'Cierra Vega': 12, 'Alden Cantrell': 13, 'Kierra Gentry': 13, 'Pierre Cox': 13}
+
+initial_value = int(my_dict['Cierra Vega'])
+
+result = all(v == initial_value for v in my_dict.values())
+
+# 45.3
+# Task: Write a Python program to compare each value to the first one
+# in a loop and return True if they are all the same.
+my_dict = {'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12}
+
+initial_value = my_dict['Cierra Vega']
+
+def all_loop(d, initial_value):
+    for v in my_dict.values():
+        if v != initial_value:
+            return False
+   
+    return True
+
+result = all_loop(my_dict, initial_value)
+
+# 45.4
+# Task: Write a Python function to recursively check the uniformity
+# of dictionary values.
+my_dict = {'Cierra Vega': 12, 'Alden Cantrell': 12, 'Kierra Gentry': 12, 'Pierre Cox': 12}
+initial_value = my_dict['Cierra Vega']
+
+def recursive_all(d, first):
+    for v in d.values():
+        if isinstance(v, dict):
+            first = check_uniform(v, first)
+            if first is False:
+                return False
+        else:
+            if first is None:
+                first = v
+            elif v != first:
+                return False
+   
+    return first
+
+def is_uniform(d, initial_value):
+    return recursive_all(d, initial_value) is not False
+
+result = is_uniform(my_dict, initial_value)
+
+# 46.0
+# Task: Write a Python program to create a dictionary grouping a sequence of
+# key-value pairs into a dictionary of lists.
+my_list = [('fantasy', 15), ('mediumorchid', 17), ('fantasy', 16), ('mediumorchid', 12)]
+
+# Method 1: Standard
+
+def group_vals(lst):
+    out = {}
+    for k, v in lst:
+        out.setdefault(k, []).append(v)
+   
+    return out
+
+result = group_vals(my_list)
+
+# Method 2: defaultdict
+
+def group_vals(lst):
+    out = defaultdict(list)
+   
+    for k, v in lst:
+        out[k].append(v)
+   
+    return out
+
+result = group_vals(my_list)
+
+# 46.1
+# Task: Write a Python program to group a list of key-value tuples into a dictionary
+# where each key maps to a list of its associated values using collections.defaultdict.
+my_list = [('fantasy', 15), ('mediumorchid', 17), ('fantasy', 16), ('mediumorchid', 12)]
+
+def group_vals(lst):
+    out = defaultdict(list)
+   
+    for k, v in lst:
+        out[k].append(v)
+   
+    return out
+
+result = group_vals(my_list)
+
+# 46.2
+# Task: Write a Python program to use dictionary comprehension to form a dictionary
+# of lists from a sequence of tuples.
+my_tuples = [('item1', 12), ('item2', 13), ('item3', 14), ('item1', 15), ('item5', 16), ('item5', 17), ('item7', 18), ('item2', 19)]
+
+result = {k: [v for key, v in my_tuples if key == k] for k, _ in my_tuples}
+
+# 46.3
+# Task: Write a Python program to iterate over a list of pairs and build a grouped
+# dictionary, appending values for duplicate keys.
+my_tuples = [('item1', 12), ('item2', 13), ('item3', 14), ('item1', 15), ('item5', 16), ('item5', 17), ('item7', 18), ('item2', 19)]
+
+# Method 1: Loop
+def groupwith_loop(lst):
+    out = {}
+    for k, v in lst:
+        if k not in out:
+            out[k] = []
+        out[k].append(v)
+   
+    return out
+
+result = groupwith_loop(my_tuples)
+
+# Method 2: setdefault
+def groupwith_setdefault(lst):
+    out = {}
+    for k, v in lst:
+        out.setdefault(k, []).append(v)
+   
+    return out
+
+result = groupwith_setdefault(my_tuples)
+
+# Method 3: defaultdict
+
+def groupwith_defaultdict(lst):
+    out = defaultdict(list)
+    for k, v in lst:
+        out[k].append(v)
+   
+    return out
+
+result = groupwith_defaultdict(my_tuples)
+
+# 46.4
+# Task: Write a Python function to convert a list of key-value pairs into a
+# dictionary of lists, ensuring order is preserved.
+my_tuples = [('item1', 12), ('item2', 13), ('item3', 14), ('item1', 15), ('item5', 16), ('item5', 17), ('item7', 18), ('item2', 19)]
+
+def groupwith_defaultdict(lst):
+    out = defaultdict(list)
+    for k, v in lst:
+        out[k].append(v)
+   
+    return out
+
+result = groupwith_defaultdict(my_tuples)
+ 
