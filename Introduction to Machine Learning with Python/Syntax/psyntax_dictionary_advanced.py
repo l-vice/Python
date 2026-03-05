@@ -3160,3 +3160,410 @@ def groupwith_defaultdict(lst):
 
 result = groupwith_defaultdict(my_tuples)
  
+# 47.0
+# Task: Write a Python program to split a given dictionary
+# of lists into lists of dictionaries.
+my_dict = {'Science': [84, 70, 66, 55, 90], 'Language': [90, 88, 98, 100, 76]}
+   
+def list_of_dicts(marks):
+    # Get the keys (subjects) from the 'marks' dictionary.
+    keys = marks.keys()
+   
+    # Use the 'zip' function to transpose the lists of marks into tuples.
+    vals = zip(*[marks[k] for k in keys])
+   
+    # Create a list of dictionaries by zipping the keys and the transposed tuples.
+    result = [dict(zip(keys, v)) for v in vals]
+    return result
+
+result = list_of_dicts(my_dict)
+
+# 47.1
+# Task: Write a Python program to convert a dictionary of
+# lists into a list of dictionaries by zipping the list values.
+my_dict = {'Science': [84, 70, 66, 55, 90], 'Language': [90, 88, 98, 100, 76]}
+
+keys = my_dict.keys()
+values = zip(*[my_dict[k] for k in keys])
+
+result = [dict(zip(keys, v)) for v in values]
+
+# 47.2
+# Task: Write a Python function that takes a dictionary
+# with list values and returns a list of dictionaries for each index.
+my_dict = {'Science': [84, 70, 66, 55, 90], 'Language': [90, 88, 98, 100, 76]}
+
+def list_of_dicts(d):
+    # Keys
+    keys = d.keys()
+    # Values
+    vals = zip(*[d[k] for k in keys])
+    # out
+    out = [dict(zip(keys, v)) for v in vals]
+   
+    return out
+
+result = list_of_dicts(my_dict)
+
+# 47.3
+# Task: Write a Python program to use list comprehension
+# and zip() to transform a dictionary of lists into multiple dictionaries.
+my_dict = {'Science': [84, 70, 66, 55, 90], 'Language': [90, 88, 98, 100, 76]}
+
+def list_of_dicts(d):
+    return [dict(zip(d.keys(), v)) for v in zip(*d.values())]
+
+result = list_of_dicts(my_dict)
+
+# 47.4
+# Task: Write a Python program to implement a function that
+# decomposes a dictionary of lists into a list of single-key dictionaries.
+my_dict = {'Science': [84, 70, 66, 55, 90], 'Language': [90, 88, 98, 100, 76]}
+   
+def decompose_dict(d):
+    return [{k: v} for k, values in d.items() for v in values]
+
+result = decompose_dict(my_dict)
+
+# 48.0
+# Task: Write a Python program to remove a specified dictionary from a given list.
+my_dicts = [
+    {"id": "#FF0000", "color": "Red"},
+    {"id": "#800000", "color": "Maroon"},
+    {"id": "#FFFF00", "color": "Yellow"},
+    {"id": "#808000", "color": "Olive"}
+]
+
+target_key = '#FF0000'
+
+def remove_dict(lst, t):
+    lst[:] = [d for d in lst if d.get('id') != t]
+   
+    return lst
+
+result = remove_dict(my_dicts, target_key)
+
+# 48.1
+# Task: Write a Python program to filter out a dictionary
+# from a list based on a matching key-value pair using list comprehension.
+my_dicts = [
+    {"id": "#FF0000", "color": "Red"},
+    {"id": "#800000", "color": "Maroon"},
+    {"id": "#FFFF00", "color": "Yellow"},
+    {"id": "#808000", "color": "Olive"}
+]
+
+target_pair = ("id", "#FF0000")
+
+def remove_dict(lst, t):
+    for d in lst:
+        for k, v in d.items():
+            if (k, v) == t:
+                lst.remove(d)
+   
+    return lst
+
+result = remove_dict(my_dicts, target_pair)
+
+# 48.2
+# Task: Write a Python program to remove a dictionary with a
+# specified key from a list of dictionaries by iterating over the list.
+my_dicts = [
+    {"id": "#FF0000", "color": "Red"},
+    {"id": "#800000", "color": "Maroon"},
+    {"id": "#FFFF00", "color": "Yellow"},
+    {"id": "#808000", "color": "Olive"}
+]
+
+ref_key = "id"
+target_value = "#FFFF00"
+
+def remove_dict(lst, ref_key, target_key):
+    for d in lst:
+        if d.get(ref_key) == target_value:
+            lst.remove(d)
+   
+    return lst
+
+result = remove_dict(my_dicts, ref_key, target_key)
+
+# 48.3
+# Task: Write a Python program to implement a function that
+# deletes dictionaries from a list that match given criteria.
+my_dicts = [
+    {"id": "#FF0000", "color": "Red", "Jeans": "Yes"},
+    {"id": "#800000", "color": "Maroon"},
+    {"id": "#FFFF00", "color": "Yellow"},
+    {"id": "#808000", "color": "Olive"}
+]
+
+criteria = lambda val: val == 2
+
+def remove_dict(lst, criteria):
+    return [d for d in lst if criteria(len(d))]
+
+result = remove_dict(my_dicts, criteria)
+
+# 48.4
+# Task: Write a Python program to use filter()
+# to exclude dictionaries that contain a specific key-value combination.
+my_dicts = [
+    {"id": "#FF0000", "color": "Red"},
+    {"id": "#800000", "color": "Maroon"},
+    {"id": "#0000FF", "color": "Blue"},
+    {"id": "#FFFFFF", "color": "White"}
+]
+
+target_pair = ("color", "Maroon")
+
+def remove_dict(lst, target_pair):
+    return list(filter(lambda d: target_pair not in d.items(), lst))
+
+result = remove_dict(my_dicts, target_pair)
+
+# 49.0
+# Task: Write a Python program to convert string
+# values of a given dictionary into integer/float datatypes.
+my_dicts = [{'x': '10'}, {'y': '12'}, {'z': '15'},
+           {'w': '22.13'}, {'v': '24'}, {'n': '65'}]
+
+
+result = [{k: int(v) if v.isdigit() else float(v) for k, v in d.items()} for d in my_dicts]
+
+# 49.1
+# Task: Write a Python program to iterate over
+# a dictionary and convert numeric string values to integers using int().
+my_dicts = [{'x': '10'}, {'y': '12'}, {'z': 'honey'},
+           {'w': '22.13'}, {'v': '24'}, {'n': '65'}]
+
+def convert_int(lst):
+    for d in lst:
+        for k, v in d.items():
+            if isinstance(v, (int, float)):
+                d[k] = int(v)
+   
+    return lst
+
+result = convert_int(my_dicts)
+
+# 49.2
+# Task: Write a Python program to update dictionary
+# values to float if they contain a decimal point, otherwise to int.
+my_dicts = [{'x': '10'}, {'y': '12'}, {'z': '33.65'},
+           {'w': '22.13'}, {'v': '24'}, {'n': '65'}]
+
+result = [{k: int(v) if '.' not in v else float(v) for k, v in d.items()} for d in my_dicts]
+
+# 49.3
+# Task: Write a Python program to use try/except
+# to safely cast dictionary string values to numeric types.
+my_dict = {'x': '12.11', 'y': '6', 'z': '8',
+            'w': '16.78', 'v': '15.42', 'u': '4'}
+
+def convert_vals(d):
+    out = {}
+    for k, v in d.items():
+        try:
+            if '.' in v:
+                out[k] = float(v)
+            else:
+                out[k] = int(v)
+       
+        except ValueError:
+            out[k] = v
+   
+    return out
+
+result = convert_vals(my_dict)
+           
+# 49.4
+# Task: Write a Python function that checks each
+# value of a dictionary and converts it to a numeric type if possible.
+my_dict = {'x': '12.11', 'y': '6', 'z': '8',
+            'w': '16.78', 'v': '15.42', 'u': 'hex'}
+
+
+def convert_vals(d):
+    for k, v in d.items():
+        try:
+            if '.' in v:
+                d[k] = float(v)
+            else:
+                d[k] = int(v)
+       
+        except ValueError:
+            d[k] = v
+   
+    return d
+
+result = convert_vals(my_dict)
+
+# 50.0
+# Task: A Python dictionary contains List as a value. Write a
+# Python program to clear the list values in the said dictionary.
+my_dict = {'c1': [12, 14, 16], 'c2': [17, 12, 11], 'c3': [66, 87], 'c4': 2}
+
+for k, v in my_dict.items():
+    if isinstance(v, list):
+        my_dict[k].clear()
+   
+    else:
+        my_dict[k] = v
+
+# 50.1
+# Task: Write a Python program to iterate over a dictionary
+# and set each list value to an empty list using dictionary comprehension.
+my_dict = {'c1': [12, 14, 16], 'c2': [17, 12, 11], 'c3': [66, 87], 'c4': 2}
+
+for k, v in my_dict.items():
+    if isinstance(v, list):
+        my_dict[k] = []
+    else:
+        my_dict[k] = v
+
+# 50.2
+# Task: Write a Python program to update a dictionary
+# in-place by replacing each list with an empty list.
+my_dict = {'c1': [12, 14, 16], 'c2': [17, 12, 11], 'c3': [66, 87], 'c4': 2}
+
+for k in my_dict:
+    my_dict[k] = []
+
+# 50.3
+# Task: Write a Python program to implement a function
+# that returns a new dictionary with the same keys but empty lists as values.
+my_dict = {'c1': [12, 14, 16], 'c2': [17, 12, 11], 'c3': [66, 87], 'c4': 2}
+
+def empty_dict(d):
+    out = {}
+    for k, v in d.items():
+        out[k] = []
+   
+    return out
+
+result = empty_dict(my_dict)
+
+# 50.4
+# Task: Write a Python program to use a loop to clear
+# list values for each key in a given dictionary.
+my_dict = {'c1': [12, 14, 16], 'c2': [17, 12, 11], 'c3': [66, 87], 'c4': 2}
+
+for k, v in my_dict.items():
+    if isinstance(v, list):
+        my_dict[k].clear()
+
+
+# 51.0
+# Task: A Python Dictionary contains List as a value.
+# Write a Python program to update the list values in the said dictionary.
+my_dict = {'Math': [88, 89, 90], 'Physics': [92, 94, 89], 'Chemistry': [90, 87, 93]}
+
+def update_dict_vals(d):
+    d['Math'] = [x + 1 for x in d['Math']]
+    d['Physics'] = [x - 2 for x in d['Physics']]                
+   
+    return d    
+
+result = update_dict_vals(my_dict)
+
+# 51.1
+# Task: Write a Python program to update each list in
+# a dictionary by applying a function (e.g., increment each element by 1) to every item.
+my_dict = {'Math': [88, 89, 90], 'Physics': [92, 94, 89], 'Chemistry': [90, 87, 93]}
+fn = lambda x: int((x**2 - x**.5)/2)
+
+def update_dict_vals(d, f):
+    for k in d:
+        d[k] = [f(v) for v in d[k]]
+   
+    return d
+
+result = update_dict_vals(my_dict, fn)
+
+# 51.2
+# Task: Write a Python program to use dictionary comprehension
+# to modify list values, such as squaring each number.
+my_dict = {'Math': [88, 89, 90], 'Physics': [92, 94, 89], 'Chemistry': [90, 87, 93]}
+
+result = {k: [x**2 for x in v] for k, v in my_dict.items()}
+
+# 51.3
+# Task: Write a Python program to iterate over a dictionary
+# and update its list values in-place with a transformation.
+my_dict = {'B': ['Bali', 'Baku', 'Bengal'], 'P': ['Poland', 'Prussia', 'Pitcairn'], 'C': ['China', 'Colombia', 'Cost Rica']}
+
+transformation = lambda x:  x.lower()
+
+for k in my_dict:
+    my_dict[k] = [transformation(v) for v in my_dict[k]]
+
+# 51.4
+# Task: Write a Python program to implement a function
+# that takes a dictionary with list values and returns an updated dictionary after processing each list.
+my_dict = {'Math': [88, 89, 90], 'Physics': [92, 94, 89], 'Chemistry': [90, 87, 93]}
+
+def process_dict(d):
+    for k in d:
+        d[k] = [v+ 11 for v in d[k]]
+   
+    return d
+
+result = process_dict(my_dict)
+
+# 52.0
+# Task: Write a Python program to extract a list of values
+# from a given list of dictionaries.
+my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
+           {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
+
+
+
+def extract_values(lst, key_name):
+    return [d[key_name] for d in lst if key_name in d]
+
+result = extract_values(my_dict, 'Physics')
+
+# 52.1
+# Task: Write a Python program to extract the values for a specified key from a list of dictionaries using list comprehension.
+my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
+           {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
+           
+result = lambda lst, subject: [d[subject] for d in lst if subject in d]
+
+# 52.2
+# Task: Write a Python program to iterate through a list of
+# dictionaries and collect values corresponding to a given key, handling missing keys.
+my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
+           {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
+
+#key_name = 'Math'
+
+out = []
+
+#for d in my_dict:
+#    for k, v in d.items():
+#        if k == key_name:
+#            out.append(v)
+
+# 52.3
+# Task: Write a Python program to use the map() function
+# to retrieve values for a specified key from each dictionary in a list.
+my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
+           {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
+
+key_name = 'Math'
+
+#result = list(map(lambda x: x['Math'], my_dict))
+
+
+# 52.4
+# Task: Write a Python function that returns a list of values
+# for a given key from a list of dictionaries, excluding dictionaries where the key is absent.
+my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11, 'Overall': 16},
+           {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
+           
+def get_values(lst, key_name):
+    return [d[key_name] for d in lst if key_name in d]
+
+result = get_values(my_dict, 'Overall')
+ 
