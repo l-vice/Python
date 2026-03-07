@@ -3565,5 +3565,5 @@ my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11, 'Overall': 16},
 def get_values(lst, key_name):
     return [d[key_name] for d in lst if key_name in d]
 
-result = get_values(my_dict, 'Overall')
+#result = get_values(my_dict, 'Overall')
  
