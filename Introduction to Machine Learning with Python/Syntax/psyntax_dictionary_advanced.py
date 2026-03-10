@@ -1,8 +1,9 @@
+from pprint import pprint
 from operator import itemgetter
 from collections import OrderedDict, Counter, defaultdict
 from functools import reduce
 from math import prod
-from itertools import product
+from itertools import product, combinations
 from heapq import nlargest
 from string import punctuation
 from tabulate import tabulate
@@ -3225,7 +3226,7 @@ def decompose_dict(d):
 
 result = decompose_dict(my_dict)
 
-# 48.0
+# 48.0 
 # Task: Write a Python program to remove a specified dictionary from a given list.
 my_dicts = [
     {"id": "#FF0000", "color": "Red"},
@@ -3544,11 +3545,7 @@ out = []
 #    for k, v in d.items():
 #        if k == key_name:
 #            out.append(v)
-
-# 52.3
-# Task: Write a Python program to use the map() function
-# to retrieve values for a specified key from each dictionary in a list.
-my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
+ 
            {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
 
 key_name = 'Math'
@@ -3566,4 +3563,619 @@ def get_values(lst, key_name):
     return [d[key_name] for d in lst if key_name in d]
 
 #result = get_values(my_dict, 'Overall')
+
+
+# 53.0
+# Task: Write a Python program to find the length of a dictionary of values.
+my_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'white', 5: 'orange'}
+
+def sum_dict_vals(d):
+    out = {}
+    for k, v in d.items():
+        out[k] = len(v)
+   
+    return out
+
+result = sum_dict_vals(my_dict)
+
+def sum_dict_vals(d):
+    return {k: len(v) for k, v in d.items()}
+
+# 53.1
+# Task: Write a Python program to determine the number of key-value pairs in a dictionary using the len() function.
+my_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'white', 5: 'orange'}
+
+def kv_pairs(d):
+    return len(d.items())
+
+result = kv_pairs(my_dict)
+
+# 53.2
+# Task: Write a Python program to iterate through a dictionary and manually count it's items.
+my_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'white', 5: 'orange'}
+
+def kv_pairs(d):
+    out = 0
+   
+    for item in d.items():
+        out+=1
+   
+    return out
+   
+#print(f"Number of items in a dictionary: {kv_pairs(my_dict)}")
+
+# 53.3
+# Task: Write a Python program to implement a recursive function that calculates the length of a dictionary.
+my_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'white', 5: 'orange'}
+
+def dict_len(d):
+    keys = list(d.keys())
+   
+    def count_recursive(lst):
+        if not lst:
+            return 0
+        return 1 + count_recursive(lst[1:])
+   
+    return count_recursive(keys)
+
+result = dict_len(my_dict)
+
+# 53.4
+# Task: Write a Python program to use list comprehension on dictionary keys to compute the total count of entries.
+my_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'silver', 5: 'teal'}
+
+def count_entries(keys):
+    return len([k for k in keys])
+
+keys = my_dict.keys()
+result = count_entries(keys)
+# print(f"The total number of entries: {result}")
+
+# 54.0
+# Write a Python program to get the depth of a dictionary.
+my_dict = {'a': 1, 'b': {'c': {'d': {}}}}
+
+def dict_depth(d):
+    if not isinstance(d, dict) or not d:
+        return 0
+    return 1 + max(dict_depth(v) for v in d.values())
+
+result = dict_depth(my_dict)
+       
+# 54.1
+# Write a Python program to recursively determine the maximum nesting depth of a dictionary.
+my_dict = {'a': 1, 'b': {'c': {'d': {}}}}
+
+def max_depth(d):
+    if not isinstance(d, dict) or not d:
+        return 0
+   
+    return 1 + max(max_depth(v) for v in d.values())
+
+# 54.2
+# Write a Python program to implement a function that returns 1 for a flat dictionary and adds depth for nested dictionaries.
+my_dict_nested = {'a': 1, 'b': {'c': {'d': {}}}}
+my_dict_flat = {'a': 16, 'b': 22, 'c': 55}
+
+def max_depth(d):
+    if not isinstance(d, dict) or not d:
+        return 0
+   
+    return 1 + max(max_depth(v) for v in d.values())
+
+result = max_depth(my_dict_flat)
+
+# 54.3
+# Write a Python program to iterate over dictionary values and compute
+# the depth when values are dictionaries themselves.
+my_dict = {'a': 1, 'b': {'c': {'d': {}}}, 'e': {'f': {'g': {'h': {}}}}}
+
+def compute_dict_depth(d):
+    if not isinstance(d, dict) or not d:
+        return 0
+    return 1 + max(compute_dict_depth(v) for v in d.values())
+
+def dict_depth(d):
+    out = {}
+   
+    for k, v in d.items():
+        out[k] = compute_dict_depth(v)
+   
+    return out
+
+result = dict_depth(my_dict)
+
+# 54.4
+# Write a Python program to use recursion to track the nesting level
+# of a dictionary and output its maximum depth.
+my_dict = {'a': 1, 'b': {'c': {'d': {}}}, 'e': {'f': {'g': {'h': {}}}}}
+
+def max_depth(d, level = 1):
+    if not isinstance(d, dict) or not d:
+        return level - 1
+    return max(max_depth(v, level + 1) for v in d.values())
+
+result = max_depth(my_dict)
+
+# Loop version:
+def max_depth(d, level = 1):
+    if not isinstance(d, dict) or not d:
+        return level - 1
+   
+    deepest = level
+   
+    for v in d.values():
+        depth = max_depth(v, level+1)
+        if depth > deepest:
+            deepest = depth
+   
+    return deepest
+
+def max_depth(d, level = 1):
+    if not isinstance(d, dict) or not d:
+        return level - 1
+   
+    deepest = level
+
+# Print tracing:
+
+def max_depth(d, level = 1):
+    print(f"\nEntering: {d} at level {level}")
+   
+    if not isinstance(d, dict) or not d:
+        print(f"\nReturning {level - 1} because {d} is not a dictionary")
+        return level - 1
+   
+    result = max(max_depth(v, level + 1) for v in d.values())
+   
+    print(f"\nReturning {result} from level {level}")
+   
+    return result
+
+#result = max_depth(my_dict)
+
+# 55.0
+# Task: Write a Python program to access dictionary key's element by index.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+find_ele = lambda ele: list(my_dict)[ele]
+
+# 55.1
+# Task: Write a Python program to retrieve a dictionary key
+# by converting the keys to a list and accessing the nth element.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+find_key = lambda ele: list(my_dict.keys())[ele]
+
+# 55.2
+# Task: Write a Python program to implement a function that
+# returns the key at a specified index from a dictionary.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+def find_key(d, index):
+    return list(d.keys())[index]
+
+# 55.3
+# Task: Write a Python program to sort the dictionary keys
+# and then return the key at a given index.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+sorted_dict = dict(sorted(my_dict.items(), key = lambda x: x[0]))
+
+find_key = lambda d, ele: list(d)[ele]
+
+#print(find_key(sorted_dict, 0))
+
+# 55.4
+# Task: Write a Python program to iterate over a dictionary
+# with enumerate() and output the key when the index matches the input value.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+def dict_iter(d, input_value):
+    for i, (k, v) in enumerate(d.items()):
+        if i == input_value:
+            return k
+   
+    return "Value not found"
+           
+result = dict_iter(my_dict, 2)
+
+# 56.0
+# Task: Write a Python program to convert a dictionary into
+# a list of lists.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+convert_to_list = lambda d: list(map(list, d.items()))
+
+# 56.1
+# Task: Write a Python program to convert a dictionary
+# into a list of two-element lists using the items() method.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+convert_to_list = lambda d: list(map(list, d.items()))
+
+
+# 56.2
+# Task: Write a Python program to iterate over a
+# dictionary and build a nested list where each sublist
+# contains a key and its corresponding value.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+def dict_iterator(d):
+    out = []
+   
+    for k, v in d.items():
+        out.append([k, v])
+   
+    return out
+
+# 56.3
+# Task: Write a Python program to use list comprehension
+# to convert a dictionary into a sorted list of
+# lists based on keys.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
  
+def sorted_lst(d):
+    return list(map(list, sorted(d.items(), key = lambda x: x[1])))
+   
+# 56.4
+# Task: Write a Python program to implement a function that
+# transforms a dictionary into a list of [key, value] pairs and returns it.
+my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
+
+def convert_to_list(d):
+    return list(map(list, d.items()))
+
+
+# 57.0
+# Task: Write a Python program to filter even
+# numbers from a dictionary of values.
+my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
+           'VIII': [11, 12, 13, 14, 15]}
+
+is_odd = lambda x: x % 2 != 0
+
+def filter_dict(d, function):
+    for k, values in d.items():
+        d[k] = []
+        for v in values:
+            if function(v):
+                d[k].append(v)
+       
+    return d
+
+result = filter_dict(my_dict, is_odd)
+
+# 57.1
+# Task: Write a Python program to update a dictionary by
+# filtering each list value to include only even
+# numbers using dictionary comprehension.
+my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
+           'VIII': [11, 12, 13, 14, 15]}
+
+is_even = lambda x: x % 2 == 0
+
+def fiter_dict(d, function):
+    return {k: [v for v in values if function(v)] for k, values in d.items() if function(v)}
+
+# 57.2
+# Task: Write a Python program to iterate over
+# a dictionary and create a new dictionary with
+# list values containing only even integers.
+my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
+           'VIII': [11, 12, 13, 14, 15]}
+           
+def filter_dict(d, function):
+    out = {}
+   
+    for k, values in d.items():
+        out[k] = []
+        for v in values:
+            if function(v):
+                out[k].append(v)
+    return out
+
+# print(filter_dict(my_dict, is_even))
+
+# 57.3
+# Task: Write a Python program to implement a function that processes a dictionary
+# with lists and returns a dictionary of even numbers only.
+my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
+           'VIII': [11, 12, 13, 14, 15]}
+
+def filter_dict(d, function):
+    return {k: [v for v in values if function(v)] for k, values in d.items()}
+
+# print(filter_dict(my_dict, is_even))
+
+# 57.4
+# Task: Write a Python program to use a for-loop to filter out
+# odd numbers from each list value in a dictionary.
+my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
+           'VIII': [11, 12, 13, 14, 15]}
+
+def filter_dict(d, function):
+    out = {}
+   
+    for k, values in d.items():
+        out[k] = []
+        for v in values:
+            if function(v):
+                out[k].append(v)
+         
+    return out
+
+#print(filter_dict(my_dict, is_even))
+
+# 58.0
+# Task: Write a Python program to get all combinations
+# of key-value pairs in a given dictionary.
+my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
+ 
+def all_combinations(d):
+    return list(map(dict, combinations(d.items(), 2)))
+
+# print(all_combinations(my_dict))
+
+# loop version
+def all_combinations(d):
+    items = list(d.items())
+    out = {}
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            print(items[i], items[j])
+    return ''
+
+# 58.1
+# Task: Write a Python program to generate all possible
+# combinations of two keys from a dictionary using itertools.combinations.
+   
+def all_combinations(d):
+    return list(map(dict, combinations(d.items(), 2)))
+    
+# print(all_combinations(my_dict))
+
+# 58.2
+# Task: Write a Python program to create a list of dictionaries,
+# each containing a unique combination of key-value pairs of a given size.
+my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
+
+def all_combinations(d, size):
+    return list(map(dict, combinations(d.items(), size)))
+
+# print(all_combinations(my_dict, 3))
+ 
+# 58.3
+# Task: Write a Python program to implement a function that
+# returns all subsets of key-value pairs from a dictionary.
+my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
+
+def all_subsets(d):
+    items = list(d.items())
+    out = []
+   
+    for r in range(1, len(items) + 1):
+        for combo in combinations(items, r):
+            out.append(dict(combo))
+   
+    return out
+
+# pprint(all_subsets(my_dict))
+
+# 58.4
+# Task:
+my_dict = {'VI': [1, 4, 8, 12], 'VII': [14, 16, 18, 20],
+           'VIII': [22, 24, 26, 28]}
+
+def all_combos_recursive(d, r = 1, result = None):
+    if result == None:
+        result = []
+   
+    items = list(d.items())
+   
+    if r > len(items):
+        return result
+   
+    for combo in combinations(items, r):
+        result.append(dict(combo))
+   
+    return all_combos_recursive(d, r = r + 1, result = result)
+
+# pprint(all_combos_recursive(my_dict))
+       
+# 59.0
+# Task: Write a Python program to find the specified number
+# of maximum values in a given dictionary.
+my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
+
+def find_max_vals(d, n_vals):
+    return sorted(d.values())[-n_vals::]
+
+#pprint(find_max_vals(my_dict, 5))
+
+# 59.1
+# Task: Write a Python program to extract the top k key-value
+# pairs from a dictionary using heapq.nlargest.
+my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
+
+#print(nlargest(3, my_dict.items(), key = lambda x: x[1]))
+
+# 59.2
+# Task: Write a Python program to sort a dictionary
+# by its values and return a list of keys
+# corresponding to the top k values.
+my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
+
+def top_keys(d, n_keys):
+    sorted_dict = dict(sorted(d.items(), key = lambda x: x[1]))
+   
+    return list(sorted_dict.keys())[-n_keys::]
+
+# pprint(top_keys(my_dict, 3))
+
+# 59.3
+# Task: Write a Python function to iterate through a dictionary
+# and maintain a list of the k largest values.
+my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
+
+def max_vals(d, k):
+    out = []    
+    max_val = 0
+    values = list(d.values())
+   
+    for i in range(k):
+        max_val = max(values)
+        out.append(max_val)
+       
+        ind = values.index(max_val)
+        del values[ind]
+   
+           
+    return out
+
+# pprint(max_vals(my_dict, 3))
+
+# 59.4
+# Task: Write a Python program to use sorted() with a
+# custom key to retrieve the top k maximum values from a dictionary.
+my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
+
+def find_max_vals(d, k):
+    # k: Number of maximum values.
+    sorted_lst = dict(sorted(d.items(), key = lambda x: x[1], reverse=False))
+   
+    return list(sorted_lst.values())[-k::]
+   
+# print(find_max_vals(my_dict, 3))
+
+# 60.0
+# Task: Write a Python program to find the shortest list
+# of values for the keys in a given dictionary.
+my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
+           'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
+
+def find_shortest_elements(d):
+    min_list = []
+    min_val = len(min(d.values(), key = lambda x: len(x)))
+   
+    for k, v in d.items():
+        if len(v) == min_val:
+            min_list.append((k, v))
+   
+    return [k for k in dict(min_list).keys()]
+
+# OR list comprehension
+min_val = len(min(my_dict.values(), key = lambda x: len(x)))
+
+def find_shortest_elements(d):
+    return [k for k, v in d.items() if len(v) == min_val]
+
+# print(find_shortest_elements(my_dict))
+
+# 60.1
+# Task: Write a Python program to identify keys in a dictionary
+# whose associated list has the minimum length using min().
+my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
+           'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
+
+min_length = len(min(my_dict.values(), key = lambda x: len(x)))
+
+min_len_keys = lambda d: [k for k, v in d.items() if len(v) == min_length]
+
+# 60.2
+# Task: Write a Python program to use dictionary comprehension
+# to filter keys with the shortest list values.
+my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
+           'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
+
+min_len_keys = lambda d: [k for k, v in d.items() if len(v) == len(min(d.values(), key = lambda x: len(x)))]
+
+# print(min_len_keys(my_dict))
+
+# 60.3
+# Task: Write a Python program to iterate over a dictionary
+# and return the keys corresponding to the shortest list value.
+my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
+           'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
+
+def min_len_keys(d):
+    kv_list = []
+    min_length = len(min(d.values(), key = lambda x: len(x)))
+       
+    for k, v in d.items():
+        if len(v) == min_length:
+            kv_list.append((k, v))
+   
+    return [k for k in dict(kv_list).keys()]
+
+# print(min_len_keys(my_dict))
+
+# 60.4
+# Task: Write a Python program to implement a function that
+# returns all keys that have the minimum
+# list length in a dictionary.
+my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
+           'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
+
+min_list_len = lambda d: [k for k, v in d.items() if len(v) == len(min(d.values(), key = lambda x: len(x)))]
+
+# print(min_list_len(my_dict))
+
+# 61.0
+# Task: Write a Python program to count the frequency
+# of values inside a dictionary.
+my_dict = {'V': 10, 'VI': 10, 'VII': 20, 'VIII': 20,
+           'IX': 30, 'X': 30, 'XI': 35, 'XII': 40}
+           
+def count_values(d):
+    out = {}
+   
+    keys = [k for k in set(d.values())]
+    values = list(d.values())
+       
+    for k in keys:
+        out[k] = 0
+        for v in values:
+            if v == k:
+                out[k]+=1
+   
+    return out
+
+print(count_values(my_dict))
+
+# 61.1
+# Task: Write a Python program to count the frequency of each
+# value in a dictionary using collections.Counter.
+def count_values(d):
+    return Counter(d.values())
+
+#print(count_values(my_dict))
+
+# 61.2
+# Task: Write a Python program to iterate over dictionary
+# values and build a new dictionary mapping each value to its occurrence count.
+my_dict = {'V': 10, 'VI': 10, 'VII': 20, 'VIII': 20,
+           'IX': 30, 'X': 30, 'XI': 35, 'XII': 40}
+
+def count_values(d):
+    out = {}
+   
+    keys = [k for k in set(d.values())]
+    values = list(d.values())
+   
+    for k in keys:
+        out[k] = 0
+        for v in values:
+            if v == k:
+                out[k] += 1
+   
+    return out
+
+print(count_values(my_dict))
+   
+# 61.3
+# Task: Write a Python program to use dictionary comprehension to generate a frequency dictionary
+# from the values of another dictionary.
+
+# 61.4
+# Task: Write a Python program to implement a function that returns the frequency distribution of dictionary values.
