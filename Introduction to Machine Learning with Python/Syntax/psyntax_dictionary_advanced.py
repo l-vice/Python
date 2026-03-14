@@ -1,9 +1,9 @@
 from pprint import pprint
-from operator import itemgetter
+from operator import itemgetter, getitem
 from collections import OrderedDict, Counter, defaultdict
 from functools import reduce
-from math import prod
-from itertools import product, combinations
+from math import prod, floor
+from itertools import product, combinations, groupby
 from heapq import nlargest
 from string import punctuation
 from tabulate import tabulate
@@ -3499,8 +3499,7 @@ for k in my_dict:
     my_dict[k] = [transformation(v) for v in my_dict[k]]
 
 # 51.4
-# Task: Write a Python program to implement a function
-# that takes a dictionary with list values and returns an updated dictionary after processing each list.
+# Task: Write a Python program to implement a function that takes a dictionary with list values and returns an updated dictionary after processing each list.
 my_dict = {'Math': [88, 89, 90], 'Physics': [92, 94, 89], 'Chemistry': [90, 87, 93]}
 
 def process_dict(d):
@@ -3512,8 +3511,7 @@ def process_dict(d):
 result = process_dict(my_dict)
 
 # 52.0
-# Task: Write a Python program to extract a list of values
-# from a given list of dictionaries.
+# Task: Write a Python program to extract a list of values from a given list of dictionaries.
 my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
            {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
 
@@ -3532,8 +3530,7 @@ my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
 result = lambda lst, subject: [d[subject] for d in lst if subject in d]
 
 # 52.2
-# Task: Write a Python program to iterate through a list of
-# dictionaries and collect values corresponding to a given key, handling missing keys.
+# Task: Write a Python program to iterate through a list of dictionaries and collect values corresponding to a given key, handling missing keys.
 my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11},
            {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
 
@@ -3552,18 +3549,13 @@ key_name = 'Math'
 
 #result = list(map(lambda x: x['Math'], my_dict))
 
-
 # 52.4
-# Task: Write a Python function that returns a list of values
-# for a given key from a list of dictionaries, excluding dictionaries where the key is absent.
+# Task: Write a Python function that returns a list of values for a given key from a list of dictionaries, excluding dictionaries where the key is absent.
 my_dict = [{'Math': 16}, {'Math': 12}, {'Math': 11, 'Overall': 16},
            {'Physics': 12}, {'Physics': 17}, {'Physics': 22}]
            
 def get_values(lst, key_name):
     return [d[key_name] for d in lst if key_name in d]
-
-#result = get_values(my_dict, 'Overall')
-
 
 # 53.0
 # Task: Write a Python program to find the length of a dictionary of values.
@@ -3666,8 +3658,7 @@ def max_depth(d):
 result = max_depth(my_dict_flat)
 
 # 54.3
-# Write a Python program to iterate over dictionary values and compute
-# the depth when values are dictionaries themselves.
+# Write a Python program to iterate over dictionary values and compute the depth when values are dictionaries themselves.
 my_dict = {'a': 1, 'b': {'c': {'d': {}}}, 'e': {'f': {'g': {'h': {}}}}}
 
 def compute_dict_depth(d):
@@ -3683,19 +3674,14 @@ def dict_depth(d):
    
     return out
 
-result = dict_depth(my_dict)
-
 # 54.4
-# Write a Python program to use recursion to track the nesting level
-# of a dictionary and output its maximum depth.
+# Write a Python program to use recursion to track the nesting level of a dictionary and output its maximum depth.
 my_dict = {'a': 1, 'b': {'c': {'d': {}}}, 'e': {'f': {'g': {'h': {}}}}}
 
 def max_depth(d, level = 1):
     if not isinstance(d, dict) or not d:
         return level - 1
     return max(max_depth(v, level + 1) for v in d.values())
-
-result = max_depth(my_dict)
 
 # Loop version:
 def max_depth(d, level = 1):
@@ -3732,8 +3718,6 @@ def max_depth(d, level = 1):
    
     return result
 
-#result = max_depth(my_dict)
-
 # 55.0
 # Task: Write a Python program to access dictionary key's element by index.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
@@ -3741,34 +3725,28 @@ my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 find_ele = lambda ele: list(my_dict)[ele]
 
 # 55.1
-# Task: Write a Python program to retrieve a dictionary key
-# by converting the keys to a list and accessing the nth element.
+# Task: Write a Python program to retrieve a dictionary key by converting the keys to a list and accessing the nth element.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 find_key = lambda ele: list(my_dict.keys())[ele]
 
 # 55.2
-# Task: Write a Python program to implement a function that
-# returns the key at a specified index from a dictionary.
+# Task: Write a Python program to implement a function that returns the key at a specified index from a dictionary.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 def find_key(d, index):
     return list(d.keys())[index]
 
 # 55.3
-# Task: Write a Python program to sort the dictionary keys
-# and then return the key at a given index.
+# Task: Write a Python program to sort the dictionary keys and then return the key at a given index.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 sorted_dict = dict(sorted(my_dict.items(), key = lambda x: x[0]))
 
 find_key = lambda d, ele: list(d)[ele]
 
-#print(find_key(sorted_dict, 0))
-
 # 55.4
-# Task: Write a Python program to iterate over a dictionary
-# with enumerate() and output the key when the index matches the input value.
+# Task: Write a Python program to iterate over a dictionary with enumerate() and output the key when the index matches the input value.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 def dict_iter(d, input_value):
@@ -3777,28 +3755,21 @@ def dict_iter(d, input_value):
             return k
    
     return "Value not found"
-           
-result = dict_iter(my_dict, 2)
-
+    
 # 56.0
-# Task: Write a Python program to convert a dictionary into
-# a list of lists.
+# Task: Write a Python program to convert a dictionary into a list of lists.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 convert_to_list = lambda d: list(map(list, d.items()))
 
 # 56.1
-# Task: Write a Python program to convert a dictionary
-# into a list of two-element lists using the items() method.
+# Task: Write a Python program to convert a dictionary into a list of two-element lists using the items() method.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 convert_to_list = lambda d: list(map(list, d.items()))
 
-
 # 56.2
-# Task: Write a Python program to iterate over a
-# dictionary and build a nested list where each sublist
-# contains a key and its corresponding value.
+# Task: Write a Python program to iterate over a dictionary and build a nested list where each sublist contains a key and its corresponding value.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 def dict_iterator(d):
@@ -3810,26 +3781,21 @@ def dict_iterator(d):
     return out
 
 # 56.3
-# Task: Write a Python program to use list comprehension
-# to convert a dictionary into a sorted list of
-# lists based on keys.
+# Task: Write a Python program to use list comprehension to convert a dictionary into a sorted list of lists based on keys.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
  
 def sorted_lst(d):
     return list(map(list, sorted(d.items(), key = lambda x: x[1])))
    
 # 56.4
-# Task: Write a Python program to implement a function that
-# transforms a dictionary into a list of [key, value] pairs and returns it.
+# Task: Write a Python program to implement a function that transforms a dictionary into a list of [key, value] pairs and returns it.
 my_dict = {'Math': 90, 'Physics': 92, 'Engineering': 100}
 
 def convert_to_list(d):
     return list(map(list, d.items()))
 
-
 # 57.0
-# Task: Write a Python program to filter even
-# numbers from a dictionary of values.
+# Task: Write a Python program to filter even numbers from a dictionary of values.
 my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
            'VIII': [11, 12, 13, 14, 15]}
 
@@ -3844,12 +3810,8 @@ def filter_dict(d, function):
        
     return d
 
-result = filter_dict(my_dict, is_odd)
-
 # 57.1
-# Task: Write a Python program to update a dictionary by
-# filtering each list value to include only even
-# numbers using dictionary comprehension.
+# Task: Write a Python program to update a dictionary by filtering each list value to include only even numbers using dictionary comprehension.
 my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
            'VIII': [11, 12, 13, 14, 15]}
 
@@ -3859,9 +3821,7 @@ def fiter_dict(d, function):
     return {k: [v for v in values if function(v)] for k, values in d.items() if function(v)}
 
 # 57.2
-# Task: Write a Python program to iterate over
-# a dictionary and create a new dictionary with
-# list values containing only even integers.
+# Task: Write a Python program to iterate over a dictionary and create a new dictionary with list values containing only even integers.
 my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
            'VIII': [11, 12, 13, 14, 15]}
            
@@ -3875,22 +3835,16 @@ def filter_dict(d, function):
                 out[k].append(v)
     return out
 
-# print(filter_dict(my_dict, is_even))
-
 # 57.3
-# Task: Write a Python program to implement a function that processes a dictionary
-# with lists and returns a dictionary of even numbers only.
+# Task: Write a Python program to implement a function that processes a dictionary with lists and returns a dictionary of even numbers only.
 my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
            'VIII': [11, 12, 13, 14, 15]}
 
 def filter_dict(d, function):
     return {k: [v for v in values if function(v)] for k, values in d.items()}
 
-# print(filter_dict(my_dict, is_even))
-
 # 57.4
-# Task: Write a Python program to use a for-loop to filter out
-# odd numbers from each list value in a dictionary.
+# Task: Write a Python program to use a for-loop to filter out odd numbers from each list value in a dictionary.
 my_dict = {'VI': [1, 2, 3, 4, 5], 'VII': [6, 7, 8, 9, 10],
            'VIII': [11, 12, 13, 14, 15]}
 
@@ -3904,18 +3858,13 @@ def filter_dict(d, function):
                 out[k].append(v)
          
     return out
-
-#print(filter_dict(my_dict, is_even))
-
+    
 # 58.0
-# Task: Write a Python program to get all combinations
-# of key-value pairs in a given dictionary.
+# Task: Write a Python program to get all combinations of key-value pairs in a given dictionary.
 my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
  
 def all_combinations(d):
     return list(map(dict, combinations(d.items(), 2)))
-
-# print(all_combinations(my_dict))
 
 # loop version
 def all_combinations(d):
@@ -3927,27 +3876,20 @@ def all_combinations(d):
     return ''
 
 # 58.1
-# Task: Write a Python program to generate all possible
-# combinations of two keys from a dictionary using itertools.combinations.
+# Task: Write a Python program to generate all possible combinations of two keys from a dictionary using itertools.combinations.
    
 def all_combinations(d):
     return list(map(dict, combinations(d.items(), 2)))
-    
-# print(all_combinations(my_dict))
 
 # 58.2
-# Task: Write a Python program to create a list of dictionaries,
-# each containing a unique combination of key-value pairs of a given size.
+# Task: Write a Python program to create a list of dictionaries, each containing a unique combination of key-value pairs of a given size.
 my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
 
 def all_combinations(d, size):
     return list(map(dict, combinations(d.items(), size)))
-
-# print(all_combinations(my_dict, 3))
  
 # 58.3
-# Task: Write a Python program to implement a function that
-# returns all subsets of key-value pairs from a dictionary.
+# Task: Write a Python program to implement a function that returns all subsets of key-value pairs from a dictionary.
 my_dict = {'V': [1, 4, 6, 8], 'VI': [10, 12, 14, 16], 'VII': [18, 20, 22, 24]}
 
 def all_subsets(d):
@@ -3960,10 +3902,8 @@ def all_subsets(d):
    
     return out
 
-# pprint(all_subsets(my_dict))
-
 # 58.4
-# Task:
+# Task: Write a Python program to use recursion to generate combinations of keys and return corresponding sub-dictionaries.
 my_dict = {'VI': [1, 4, 8, 12], 'VII': [14, 16, 18, 20],
            'VIII': [22, 24, 26, 28]}
 
@@ -3980,30 +3920,22 @@ def all_combos_recursive(d, r = 1, result = None):
         result.append(dict(combo))
    
     return all_combos_recursive(d, r = r + 1, result = result)
-
-# pprint(all_combos_recursive(my_dict))
        
 # 59.0
-# Task: Write a Python program to find the specified number
-# of maximum values in a given dictionary.
+# Task: Write a Python program to find the specified number of maximum values in a given dictionary.
 my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
 
 def find_max_vals(d, n_vals):
     return sorted(d.values())[-n_vals::]
 
-#pprint(find_max_vals(my_dict, 5))
-
 # 59.1
-# Task: Write a Python program to extract the top k key-value
-# pairs from a dictionary using heapq.nlargest.
+# Task: Write a Python program to extract the top k key-value pairs from a dictionary using heapq.nlargest.
 my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
 
 #print(nlargest(3, my_dict.items(), key = lambda x: x[1]))
 
 # 59.2
-# Task: Write a Python program to sort a dictionary
-# by its values and return a list of keys
-# corresponding to the top k values.
+# Task: Write a Python program to sort a dictionary by its values and return a list of keys corresponding to the top k values.
 my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
 
 def top_keys(d, n_keys):
@@ -4011,11 +3943,8 @@ def top_keys(d, n_keys):
    
     return list(sorted_dict.keys())[-n_keys::]
 
-# pprint(top_keys(my_dict, 3))
-
 # 59.3
-# Task: Write a Python function to iterate through a dictionary
-# and maintain a list of the k largest values.
+# Task: Write a Python function to iterate through a dictionary and maintain a list of the k largest values.
 my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
 
 def max_vals(d, k):
@@ -4033,11 +3962,8 @@ def max_vals(d, k):
            
     return out
 
-# pprint(max_vals(my_dict, 3))
-
 # 59.4
-# Task: Write a Python program to use sorted() with a
-# custom key to retrieve the top k maximum values from a dictionary.
+# Task: Write a Python program to use sorted() with a custom key to retrieve the top k maximum values from a dictionary.
 my_dict = {'a': 5, 'b': 14, 'c': 32, 'd': 35, 'e': 11, 'h': 16, 'g': 6}
 
 def find_max_vals(d, k):
@@ -4046,18 +3972,15 @@ def find_max_vals(d, k):
    
     return list(sorted_lst.values())[-k::]
    
-# print(find_max_vals(my_dict, 3))
-
 # 60.0
-# Task: Write a Python program to find the shortest list
-# of values for the keys in a given dictionary.
+# Task: Write a Python program to find the shortest list of values for the keys in a given dictionary.
 my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
            'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
 
 def find_shortest_elements(d):
     min_list = []
     min_val = len(min(d.values(), key = lambda x: len(x)))
-   
+       
     for k, v in d.items():
         if len(v) == min_val:
             min_list.append((k, v))
@@ -4070,11 +3993,8 @@ min_val = len(min(my_dict.values(), key = lambda x: len(x)))
 def find_shortest_elements(d):
     return [k for k, v in d.items() if len(v) == min_val]
 
-# print(find_shortest_elements(my_dict))
-
 # 60.1
-# Task: Write a Python program to identify keys in a dictionary
-# whose associated list has the minimum length using min().
+# Task: Write a Python program to identify keys in a dictionary whose associated list has the minimum length using min().
 my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
            'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
 
@@ -4083,18 +4003,14 @@ min_length = len(min(my_dict.values(), key = lambda x: len(x)))
 min_len_keys = lambda d: [k for k, v in d.items() if len(v) == min_length]
 
 # 60.2
-# Task: Write a Python program to use dictionary comprehension
-# to filter keys with the shortest list values.
+# Task: Write a Python program to use dictionary comprehension to filter keys with the shortest list values.
 my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
            'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
 
 min_len_keys = lambda d: [k for k, v in d.items() if len(v) == len(min(d.values(), key = lambda x: len(x)))]
 
-# print(min_len_keys(my_dict))
-
 # 60.3
-# Task: Write a Python program to iterate over a dictionary
-# and return the keys corresponding to the shortest list value.
+# Task: Write a Python program to iterate over a dictionary and return the keys corresponding to the shortest list value.
 my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
            'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
 
@@ -4107,24 +4023,17 @@ def min_len_keys(d):
             kv_list.append((k, v))
    
     return [k for k in dict(kv_list).keys()]
-
-# print(min_len_keys(my_dict))
-
+    
 # 60.4
-# Task: Write a Python program to implement a function that
-# returns all keys that have the minimum
-# list length in a dictionary.
+# Task: Write a Python program to implement a function that returns all keys that have the minimum list length in a dictionary.
 my_dict = {'V': [10], 'VI': [11, 12], 'VII': [16, 12, 14],
            'VIII': [9, 8, 4, 12], 'IX': [1], 'X': [12, 19]}
 
 min_list_len = lambda d: [k for k, v in d.items() if len(v) == len(min(d.values(), key = lambda x: len(x)))]
 
-# print(min_list_len(my_dict))
-
 # 61.0
-# Task: Write a Python program to count the frequency
-# of values inside a dictionary.
-my_dict = {'V': 10, 'VI': 10, 'VII': 20, 'VIII': 20,
+# Task: Write a Python program to count the frequency of values inside a dictionary.
+my_dict  = {'V': 10, 'VI': 10, 'VII': 20, 'VIII': 20,
            'IX': 30, 'X': 30, 'XI': 35, 'XII': 40}
            
 def count_values(d):
@@ -4141,19 +4050,13 @@ def count_values(d):
    
     return out
 
-print(count_values(my_dict))
-
 # 61.1
-# Task: Write a Python program to count the frequency of each
-# value in a dictionary using collections.Counter.
+# Task: Write a Python program to count the frequency of each value in a dictionary using collections.Counter.
 def count_values(d):
     return Counter(d.values())
 
-#print(count_values(my_dict))
-
 # 61.2
-# Task: Write a Python program to iterate over dictionary
-# values and build a new dictionary mapping each value to its occurrence count.
+# Task: Write a Python program to iterate over dictionary values and build a new dictionary mapping each value to its occurrence count.
 my_dict = {'V': 10, 'VI': 10, 'VII': 20, 'VIII': 20,
            'IX': 30, 'X': 30, 'XI': 35, 'XII': 40}
 
@@ -4170,12 +4073,736 @@ def count_values(d):
                 out[k] += 1
    
     return out
-
-print(count_values(my_dict))
    
 # 61.3
-# Task: Write a Python program to use dictionary comprehension to generate a frequency dictionary
-# from the values of another dictionary.
+# Task: Write a Python program to use dictionary comprehension to generate a frequency dictionary from the values of another dictionary.
+my_dict = {'V': 10, 'VI': 20, 'VII': 10, 'VIII': 20,
+           'IX': 40, 'X': 50, 'XI': 60, 'XII': 70}
+
+def freq_table(d):
+    return {k: list(d.values()).count(k) for k in set(d.values())}
+
 
 # 61.4
 # Task: Write a Python program to implement a function that returns the frequency distribution of dictionary values.
+my_dict = {'V': 10, 'VI': 20, 'VII': 10, 'VIII': 20,
+           'IX': 40, 'X': 50, 'XI': 60, 'XII': 70}
+
+def freq_table(d):
+    return {k: list(d.values().count(k) for k in set(d.values()))}
+
+def freq_table(d):
+    return Counter(d.values())
+
+def freq_table(d):
+    keys = set(d.values())
+    values = d.values()
+   
+    out = defaultdict(int)
+   
+    for k in keys:
+        for v in values:
+            if v == k:
+                out[k]+=1
+   
+    return out
+
+# 62.0
+# Task: Write a Python program to extract values from a given dictionary and create a list of lists from those values.
+my_dicts = [{'student_id': 1, 'name': 'John Doe', 'class': 'V'},
+           {'student_id': 2, 'name': 'Jane Doe', 'class': 'VI'},
+           {'student_id': 3, 'name': 'Steven Smith', 'class': 'VII'},
+           {'student_id': 4, 'name': 'Steve Monicker', 'class': 'VIII'},
+           {'student_id': 5, 'name': 'Nick Blossom', 'class': 'IX'}]  
+
+find_keys = lambda d: [k for k in d.keys()]
+keys = find_keys(my_dicts[0]) # or manually specify
+
+def extract_values(dicts, keys):
+    return [list(d[k] for k in keys) for d in dicts]
+
+
+# 62.1
+# Task: Write a Python program to extract the values from a dictionary and return them as a list of lists using list().
+
+def extract_values(dicts):
+    return [list(d.values()) for d in dicts]
+ 
+# 62.2
+# Task: Write a Python program to iterate over a dictionary and collect its values into a nested list structure.
+out = []
+
+for d in my_dicts:
+    out.append(list(d.values()))
+       
+# 62.3
+# Task: Write a Python program to use dictionary.values() and convert the resulting view into a list of lists.
+
+out = []
+
+for d in my_dicts:
+    out.append(list(d.values()))
+
+# 62.4
+# Task: Write a Python program to implement a function that returns all dictionary values as separate lists within one list.
+
+# Function 1: d.values()
+def extract_values(dicts):
+    return [list(d.values()) for d in dicts]
+
+# Function 2:
+keys = [k for k in my_dicts[0].keys()]
+
+def extract_values(dicts, keys):
+    return [list(d[k] for k in keys) for d in dicts]
+
+# 63.0
+# Task: Write a Python program to convert a given list of lists to a dictionary.
+my_list = [[1, 'Jean Castro', 'V'], [2, 'Steve Borello', 'VI'],
+           [3, 'Nick Jenkins', 'VII'], [4, 'John Doe', 'VII']]
+
+out = defaultdict(dict)
+
+for item in my_list:
+    out[item[0]] = item[1::]
+   
+# 63.1
+# Task: Write a Python program to convert a list of two-element lists into a dictionary using dict().
+my_list = [[1, 'V'], [2, 'VI'], [3, 'VII'], [4, 'VIII'],
+           [5, 'IX'], [6, 'X'], [7, 'XI'], [8, 'XII']]
+
+out = dict(my_list)
+
+# 63.2
+# Task: Write a Python program to iterate over a list of lists and construct a dictionary where the first element is the key and the second is the value.
+my_list = [[1, 'V'], [2, 'VI'], [3, 'VII'], [4, 'VIII'],
+           [5, 'IX'], [6, 'X'], [7, 'XI'], [8, 'XII'], [9, 'XIII']]
+
+out = dict()
+
+for l in my_list:
+    out[l[0]] = l[1]
+
+# 63.3
+# Task: Write a Python program to use dictionary comprehension to transform a list of lists into a dictionary.
+my_list = [[1, 'V'], [2, 'VI'], [3, 'VII'], [4, 'VIII'],
+           [5, 'IX'], [6, 'X'], [7, 'XI'], [8, 'XII']]
+
+def convert_to_dict(lst):
+    return {l[0]: l[1] for l in lst}
+
+# 63.4
+# Task: Write a Python program to implement a function that creates a dictionary from a list of lists, handling duplicate keys by storing values in a list.
+my_list = [[1, 'V'], [2, 'VI'], [3, 'VII'], [4, 'VIII'],
+           [1, 'IX'], [6, 'X'], [2, 'XI'], [4, 'XII']]
+
+def convert_to_dict(lst):
+    out = defaultdict(list)
+   
+    for l in lst:
+        if l[0] == l[0]:
+            out[l[0]].append(l[1])
+        else:
+            out[l[0]] = l[1]
+   
+    return out
+
+# 64.0
+# Task: Write a Python program that creates key-value list pairings within a dictionary.
+my_dict = {1: ['Smith Jones'], 2: ['John Doe'], 3: ['Jane Doe'],
+           4: ['Michael Stevens'], 5: ['Smith Rugertz']}
+
+def kv_pairs(d):
+    return [dict(zip(d, sub)) for sub in product(*d.values())] 
+    
+
+# 64.1
+# Task: Write a Python program to merge a dictionary of lists into a single dictionary by pairing each key with the first element of it's list.
+my_dict = {1: ['Smith Jones', 'Jonathan Michaels'], 2: ['John Doe'], 3: ['Smith Roid'],
+           4: ['John Smith'], 5: ['Michael Stevens']}
+           
+def kv_pairs(d):
+    return {k: v for k, values in my_dict.items() for v in values}
+
+# 64.2
+# Task: Write a Python program to convert a dictionary with list values into a list containing one dictionary with key-value pairings.
+my_dict = {1: ['Smith Jones', 'Jonathan Michaels'], 2: ['John Doe'], 3: ['Smith Roid'],
+           4: ['John Smith'], 5: ['Michael Stevens']}
+
+def kv_pairs(d):
+    return [dict(zip(d.keys(), values)) for values in zip(*d.values())]
+
+# pprint(kv_pairs(my_dict))
+
+# 64.3
+# Task: Write a Python program to iterate over a dictionary of lists and combine the key with its concatenated list elements into a new dictionary.
+my_dict = {1: ['Smith Jones', 'Jonathan Michaels'], 2: ['John Doe'],
+           3: ['Smith Roid', 'Michael Stevens'], 4: ['Nick Jenkins', 'Peter Parker']}
+
+def combine_kv(d):
+    out = []
+   
+    for k, values in d.items():
+        out.append(''.join(str(k)+''.join(v for v in values)))
+       
+
+    return out
+
+# 64.4
+# Task: Write a Python program to use list comprehension to create a key-value pairing from a dictionary where each key maps to a joined string of its list.
+my_dict = {1: ['Smith Jones', 'Jonathan Michaels'], 2: ['John Doe'],
+           3: ['Smith Roid', 'Michael Stevens'], 4: ['Nick Jenkins', 'Peter Parker']}    
+   
+def combine_kv(d):
+    return [(k, ''.join(v for v in values)) for k, values in d.items()]
+   
+# 65.0
+# Task: Write a Python program to get the total length of all values in a given dictionary with string values.
+my_dict = {'#687C6C': 'US Dollar', '#8F9575': 'Artichoke',
+           '#D8D1CB':'Blackish White', '#CFC6B1': 'Soft Amber',
+           '#C7AD75': 'Gold Tan', '#A17860': 'Mocha Mousse'}
+
+def sum_val_len(d):
+    out = 0
+    for v in d.values():
+        if isinstance(v, str):
+            out+=len(v)
+        else:
+            out+=0
+   
+    return out
+
+# 65.1
+# Task: Write a Python program to compute the sum of the lengths of all string values in a dictionary using a for-loop.
+my_dict = {'#687C6C': 'US Dollar', '#8F9575': 'Artichoke',
+           '#D8D1CB':'Blackish White', '#CFC6B1': 'Soft Amber',
+           '#C7AD75': 'Gold Tan', '#A17860': 'Mocha Mousse'}
+
+def sum_val_len(d):
+    out = 0
+    for v in d.values():
+        if isinstance(v, str):
+            out+=len(v)
+        elif isinstance(v, list):
+            for val in v:
+                if isinstance(val, str):
+                    out+=len(val)
+                else:
+                    out+=0
+        else:
+            out+=0
+           
+    return out
+       
+# 65.2
+# Task: Write a Python program to use dictionary comprehension to create a list of lengths and then sum them.
+my_dict = {'#687C6C': 'US Dollar', '#8F9575': 'Artichoke',
+           '#D8D1CB':'Blackish White', '#CFC6B1': 'Soft Amber',
+           '#C7AD75': 'Gold Tan', '#A17860': 'Mocha Mousse'}
+
+def len_lst(d):
+    out = {'lengths': sum(val for val in [len(v) for v in d.values() if isinstance(v, str)])}
+    return out
+
+# 65.3
+# Task: Write a Python program to iterate over dictionary values and add up the character counts for each value.
+my_dict = {'#687C6C': 'US Dollar', '#8F9575': 'Artichoke',
+           '#D8D1CB':'Blackish White', '#CFC6B1': 'Soft Amber',
+           '#C7AD75': 'Gold Tan', '#A17860': 'Mocha Mousse'}
+           
+result = 0
+
+for v in my_dict.values():
+    result+=len(v)
+           
+# 65.4
+# Task: Write a Python function that takes a dictionary with string values and returns the total length of all values.
+my_dict = {'#687C6C': 'US Dollar', '#8F9575': 'Artichoke',
+           '#D8D1CB':'Blackish White', '#CFC6B1': 'Soft Amber',
+           '#C7AD75': 'Gold Tan', '#A17860': 'Mocha Mousse'}
+
+def sum_val_len(d):
+    out = 0
+    for v in d.values():
+        if isinstance(v, str):
+            out+=len(v)
+        else:
+            out+=0
+   
+    return out
+
+# 66.0
+# Task: Write a Python program to check if a specific key and a value exist in a dictionary.
+my_dicts = [{'student_id': 1, 'name': 'Stephen Thrill', 'class': 'V'},
+           {'student_id': 2, 'name': 'John Doe', 'class': 'VI'},
+           {'student_id': 3, 'name': 'Jane Doe', 'class': 'VII'},
+           {'student_id': 4, 'name': 'Peter Parker', 'class': 'VIII'}]
+
+kv_pair = ('name', 'Stephen Thrill')
+
+contains_item = lambda dicts, kv_pair: any(kv_pair in d.items() for d in dicts)
+
+# 66.1
+# Task: Write a Python program to verify if a specific key exists in a dictionary and whether its value matches a given target.
+
+contains_key = lambda dicts, key, v_target: any((key, v_target) in d.items() for d in dicts)
+
+# 66.2
+# Task: Write a Python program to iterate over a dictionary and return True if any entry has the specified key-value pair.
+kv_pair = ('name', 'Big Ben')
+
+def contains_item(dicts, target):
+    for d in dicts:
+        for k, v in d.items():
+            if (k, v) == target:
+                return True
+   
+    return False
+
+# 66.3
+# Task: Write a Python program to use the get() method to check for a key and validate its corresponding value.
+kv_pair = ('name', 'Jane Doe')
+
+result = False
+
+for d in my_dicts:
+    if d.get(kv_pair[0]) == kv_pair[1]:
+        result = True
+
+# 66.4
+# Task: Write a Python function that accepts a dictionary, a key, and a value, and returns True only if the key exists and its value equals the target.
+result = False
+
+def contains_key(d, key, value):
+    for k, v in d.items():
+        if (k, v) == (key, value):
+            return True
+    return False
+
+for d in my_dicts:
+    if contains_key(d, 'name', 'Jane Doe'):
+        result = True
+
+# 67.0
+# Task: Write a Python program to invert a given dictionary with non-unique hashable values.
+my_dict = {'Jane Doe': 8, 'Joe Doe': 8, 'Josh Doe': 8, 'John Doe': 8, 'Smith Jenkins': 5}
+
+def invert_dict(d):
+    out = defaultdict(list)
+   
+    for k, v in my_dict.items():
+        out[v].append(k)
+       
+    return dict(out)
+
+# 67.1
+# Task: Write a Python program to invert a dictionary so that each value maps to a list of keys using collections.defaultdict.
+my_dict = {'Jane Doe': 8, 'Joe Doe': 8, 'Josh Doe': 8, 'John Doe': 8, 'Smith Jenkins': 5, 'Ned Jenkings': 5, 'Peter Parker': 4414}
+
+result = defaultdict(list)
+
+for k, v in my_dict.items():
+    result[v].append(k)
+
+# 67.2
+# Task: Write a Python program to iterate over a dictionary and build an inverted dictionary where duplicate values become keys with list of original keys.
+my_dict = {'Jane Doe': 8, 'Joe Doe': 8, 'Josh Doe': 8, 'John Doe': 8, 'Smith Jenkins': 5, 'Ned Jenkings': 5, 'Peter Parker': 4414}
+
+result = defaultdict(list)
+
+for k, v in my_dict.items():
+    result[v].append(k)
+
+result = dict(result)
+
+# 67.3
+# Task: Write a Python program to implement a function that returns the inverted dictionary for a dictionary with non-unique values.
+my_dict = {'Jane Doe': 8, 'Joe Doe': 8, 'Josh Doe': 8, 'John Doe': 8, 'Smith Jenkins': 5, 'Ned Jenkings': 5, 'Peter Parker': 4414}
+
+def invert_dict(d):
+    out = defaultdict(list)
+   
+    for k, v in d.items():
+        out[v].append(k)
+   
+    return dict(out)
+
+# 67.4
+# Task: Write a Python program to use dictionary comprehension to create an inverted mapping that groups keys by their values.
+my_dict = {'Jane Doe': 8, 'Joe Doe': 8, 'Josh Doe': 8, 'John Doe': 8, 'Smith Jenkins': 5, 'Ned Jenkings': 5, 'Peter Parker': 4414}
+
+def inverted_dict(d):
+    return {v: [k for k in d.keys() if d[k] == v] for k, v in d.items()}
+
+# 68.0
+# Task: Write a Python program to combine two or more dictionaries, creating a list of values for each key.
+my_dict1 = {'x': 200, 'y': 300, 'z': 400, 'w': 200, 'b': 600}
+my_dict2 = {'a': 100, 'y': 150, 'x': 350, 'b': 450, 'k': 650}
+
+result = defaultdict(list)
+
+for d in [my_dict1, my_dict2]:
+    for k, v in d.items():
+        result[k].append(v)
+
+# 68.1
+# Task: Write a Python program to merge two dictionaries so that each key maps to a list of values from both dictionaries using defaultdict.
+my_dict1 = {'x': 200, 'y': 300, 'z': 400, 'w': 200, 'b': 600}
+my_dict2 = {'a': 100, 'y': 150, 'x': 350, 'b': 450, 'k': 650}
+
+def merge_dicts(*dicts):
+    out = defaultdict(list)
+   
+    for d in dicts:
+        for k in d:
+            out[k].append(d[k])
+   
+    return dict(out)
+
+# 68.2
+# Task: Write a Python program to combine multiple dictionaries into one by appending values for duplicate keys into lists.
+my_dict1 = {'x': 200, 'y': 300, 'z': 400, 'w': 200, 'b': 600}
+my_dict2 = {'a': 100, 'y': 150, 'x': 350, 'b': 450, 'k': 650}
+my_dict3 = {'z': 144, 'x': 152, 'v': 111, 'b': 45, 'a': 2311}
+
+result = defaultdict(list)
+
+for d in [my_dict1, my_dict2, my_dict3]:
+    for k in d:
+        result[k].append(d[k])
+       
+# 68.3
+# Task: Write a Python program to iterate over multiple dictionaries and construct a new dictionary where each key’s value is a list of all corresponding values.
+result = defaultdict(list)
+
+ for d in [my_dict1, my_dict2, my_dict3]:
+    for k in d:
+        result[k].append(d[k])
+# 68.4
+# Task: Write  a Python program to implement a function that takes several dictionaries and returns a combined dictionary with keys mapping to lists of values.
+
+def combine_dicts(*dicts):
+    out = defaultdict(list)
+   
+    for d in dicts:
+        for k in d:
+            out[k].append(d[k])
+   
+    return dict(out)
+
+# 69.0
+# Task: Write a Python program to group the elements of a given list based on the given function.
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+def group_vals(lst, fn):
+    out = defaultdict(list)
+   
+    for v in lst:
+        out[fn(v)].append(v)
+   
+    return dict(out)
+
+# 69.1
+# Task: Write a Python program to group elements of a list by applying the floor function and output a dictionary of groups.
+my_list = [1, 2, 3, 4, 5, 5.4, 6, 6.3, 7, 8, 9, 10]
+
+def group_vals(lst, fn):
+    out = defaultdict(list)
+   
+    for k in lst:
+        out[fn(k)].append(k)
+   
+    return dict(out)
+
+# 69.2
+# Task: Write a Python program to group words from a list by their length using a lambda function and dictionary comprehension.
+my_list = ['Marine', 'Soldier', 'Navy', 'Green']
+
+def group_vals(lst, fn):
+    out = defaultdict(list)
+   
+    for k in lst:
+        out[fn(k)].append(k)
+   
+    return dict(out)
+
+# 69.3
+# Task: Write a Python program to cluster list elements based on their remainder when divided by a given number.
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+def group_vals(lst, fn):
+    out = defaultdict(list)
+    for k in lst:
+        out[fn(k)].append(k)
+   
+    return dict(out)
+
+# 69.4
+# Task: Write a Python program to use itertools.groupby to group sorted list elements by a custom function.
+my_list = ['Baal', 'Diablo', 'Andariel', 'Lilith',
+           'Mephisto', 'Duriel']
+
+# Method 1: Program
+length = lambda x: len(x)
+
+#for k, g in groupby(sorted(my_list, key = length), key = length):
+    #print(k, list(g))
+
+
+# Method 2: Function
+def group_vals(lst, Keyfun):
+    out = {}
+   
+    for k, g in groupby(sorted(lst, key = Keyfun), key = Keyfun):
+        out[k] = list(g)
+
+    return list(out.items())
+
+# 70.0
+# Task: Write a Python program to map the values of a given list to a dictionary using a function, where the key-value pairs consist of the original value as the key and the result of the function as the value.
+my_list = [1, 2, 3 , 4]
+ 
+fn = lambda x: x**2
+
+def bind_dict(lst, fn):
+    return dict(zip(lst, map(fn, lst)))
+
+# 69.1
+# Task: Write a Python program to convert a list of numbers into a dictionary where each key is the number and its value is the square of the number.
+my_list = [1, 2, 3, 4] 
+
+result = dict(zip(my_list, map(lambda x: x*x, my_list)))
+
+# 70.2
+# Task: Write a Python program to map a list of strings to a dictionary where each key is the string and the value is its length.
+my_list = ['John', 'Steve', 'Mike', 'Nicholas', 'Michael']
+
+result = dict(zip(my_list, map(lambda x: len(x), my_list)))
+
+# 70.3
+# Task: Write a Python program to implement a function that takes a list and a function, returning a dictionary mapping each element to the function’s result.
+my_list = [1, 2, 3, 4, 5]
+
+def bind_dict(lst, fn):
+    return {k: fn(k) for k in lst}
+   
+# 70.4
+# Task: Write a Python program to use dictionary comprehension to map each element of a list to its factorial value.
+my_list = [1, 2, 3, 4, 5]
+
+def factorial_2(x):
+    result = 1
+    for i in range(1, x+1):
+        result*=i
+   
+    return result
+
+result = {k: factorial_2(k) for k in my_list}
+
+# 71.0
+# Task: Write a Python program to retrieve the value of the nested key indicated by the given selector list from a dictionary or list.
+my_dict = {
+    'Carla': {
+        'name': {
+            'first': 'Carla ',
+            'last': 'Russell'
+        },
+        'postIds': [1, 2, 3, 4, 5]
+    }
+}
+
+def retrieve_val(d, selectors):
+   
+    return reduce(getitem, selectors, d)
+
+# 71.1
+# Task: Write a Python program to access a nested value in a dictionary using a list of keys as the path.
+
+def retrieve_val(d, key_path):
+    return reduce(getitem, key_path, d)
+
+# 71.2
+# Task: Write a Python program to implement a function that takes a nested dictionary and a selector list, returning the corresponding value.
+ 
+def retrieve_val(d, key_path):
+    return reduce(getitem, key_path, d)
+
+# 71.3
+# Task: Write a Python program to traverse a nested dictionary or list using recursion and a selector list to retrieve a value.
+
+def retrieve_val(d, selector):
+    if not selector:
+        return d
+   
+    first = selector[0]
+    rest = selector[1:]
+   
+    return retrieve_val(d[first], rest)
+
+# 71.4
+# Task: Write a Python program to use reduce() from functools to fetch a nested value based on a list of keys and indices.
+
+def retrieve_val(d, key_path):
+    return reduce(lambda current, key: current[key], key_path, d)
+
+# 72.0
+# Task: Write a Python program to invert a dictionary with unique hashable values.
+my_dict = {'a': 11, 'b': 43, 'c': 7, 'd': 14}
+
+result = {v: k for k, v in my_dict.items()}
+
+# Method 2:
+# defaultdict not necessary since we are dealing with hashable values.
+def invert_dict(d):
+    out = {}
+   
+    for k, v in d.items():
+        out[v] = k
+   
+    return out
+
+# 72.1
+# Task: Write a Python program to invert a dictionary where each value is unique by swapping keys and values.
+my_dict = {'a': 11, 'b': 33, 'c': 9, 'd': 15}
+
+result = {v: k for k, v in my_dict.items()}
+
+# 72.2
+# Task: Write a Python program to create a new dictionary from a given dictionary with unique values, reversing the mapping using dictionary comprehension.
+my_dict = {'a': 11, 'b': 33, 'c': 9, 'd': 15}
+
+result = {v: k for k, v in my_dict.items()}
+
+# 72.3
+# Task: Write a Python program to implement a function that returns the inverse of a dictionary with unique hashable values.
+my_dict = {'a': 11, 'b': 33, 'c': 9, 'd': 15}
+
+def invert_dict(d):
+    return {v: k for k, v in d.items()}
+
+# 72.4
+# Task: Write a Python program to use the items() method to construct an inverted dictionary from a unique-valued dictionary.
+my_dict = {'a': 11, 'b': 33, 'c': 9, 'd': 15}
+
+def invert_dict(d):
+    out = {}
+   
+    for k, v in d.items():
+        out[v] = k
+   
+    return out
+
+# 73.0
+# Task: Write a Python program to convert a list of dictionaries into a list of values corresponding to the specified key.
+my_dicts = [{'name': 'Theodore', 'id': 1},
+            {'name': 'Steven', 'id': 2},
+            {'name': 'Michael', 'id': 3},
+            {'name': 'Nicholas', 'id': 4},
+            {'name': 'Rick', 'id': 5}]
+
+
+
+result = lambda key: [d[key] for d in my_dicts]
+
+# 73.1
+# Task: Write a Python program to extract values corresponding to a specified key from a list of dictionaries using list comprehension.
+my_dicts = [{'name': 'Theodore', 'id': 1},
+            {'name': 'Steven', 'id': 2},
+            {'name': 'Michael', 'id': 3},
+            {'name': 'Nicholas', 'id': 4},
+            {'name': 'Rick', 'id': 5}]
+
+result = lambda key: [d[key] for d in my_dicts]
+
+# 73.2
+# Task: Write a Python program to iterate over a list of dictionaries and collect the values for a given key, handling missing keys gracefully.
+my_dicts = [{'name': 'Theodore', 'id': 1},
+            {'name': 'Steven', 'id': 2},
+            {'name': 'Michael', 'id': 3},
+            {'name': 'Nicholas', 'id': 4},
+            {'name': 'Rick', 'id': 5}]
+
+def collect_keys(dicts, key):
+    out = []
+    for d in dicts:
+        try:
+            out.append(d[key])
+        except KeyError:
+            return "Key not found"
+   
+    return out
+
+# 73.3
+# Task: Write a Python program to use the map() function to retrieve values from each dictionary for a specified key.
+my_dicts = [{'name': 'Theodore', 'id': 1},
+            {'name': 'Steven', 'id': 2},
+            {'name': 'Michael', 'id': 3},
+            {'name': 'Nicholas', 'id': 4},
+            {'name': 'Rick', 'id': 5}]
+
+def collect_keys(dicts, key):
+    return list(map(lambda d: d[key], dicts))
+
+# 73.4
+# Task: Write a Python program to implement a function that returns a list of values for a given key from a list of dictionaries.
+my_dicts = [{'name': 'Theodore', 'id': 1},
+            {'name': 'Steven', 'id': 2},
+            {'name': 'Michael', 'id': 3},
+            {'name': 'Nicholas', 'id': 4},
+            {'name': 'Rick', 'id': 5}]
+
+def collect_values(dicts, key):
+    return [d[key] for d in dicts]
+
+# 74.0
+# Task: Write a Python program to create a dictionary with the same keys as the given dictionary and values generated by running the given function for each value.
+my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
+           'e': 5, 'f': 6, 'g': 7}
+
+def generate_dict(d, valFunc):
+    out = {}
+   
+    for k, v in d.items():
+        out[k] = valFunc(v)
+   
+    return out
+
+# 74.1
+# Task: Write a Python program to apply a given function to each value of a dictionary and return a new dictionary with the same keys and transformed values.
+my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
+           'e': 5, 'f': 6, 'g': 7}
+
+# To apply a function you would use map()
+def generate_dict(d, valFunc):
+    return dict(zip(list(d.keys()),
+                map(valFunc, list(d.values()))))
+
+# 74.2
+# Task: Write a Python program to use dictionary comprehension to map over a dictionary's values with a provided function.
+my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
+           'e': 5, 'f': 6, 'g': 7}
+           
+def generate_dict(d, valFunc):
+    return dict(zip(list(d.values()),
+                map(valFunc, list(d.values()))))
+
+# 74.3
+# Task: Write a Python program to implement a function that takes a dictionary and a transformation function, returning a new dictionary with updated values.
+my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
+           'e': 5, 'f': 6, 'g': 7}
+           
+def generate_dict(d, valFunc):
+    out = {}
+   
+    for k, v in d.items():
+        out[k] = valFunc(v)
+   
+    return out
+
+# 74.4
+# Task: Write a Python program to combine lambda functions with dictionary comprehension to modify all values in a dictionary.
+my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
+           'e': 5, 'f': 6, 'g': 7}
+
+result = lambda d, valFunc: {k: valFunc(v) for k, v in d.items()}
+
