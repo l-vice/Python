@@ -4231,6 +4231,7 @@ my_dict = {1: ['Smith Jones', 'Jonathan Michaels'], 2: ['John Doe'], 3: ['Smith 
 
 def kv_pairs(d):
     return [dict(zip(d.keys(), values)) for values in zip(*d.values())]
+    
 
 # pprint(kv_pairs(my_dict))
 
@@ -4797,8 +4798,8 @@ def generate_dict(d, valFunc):
     for k, v in d.items():
         out[k] = valFunc(v)
    
-    return out
-
+   return out
+ 
 # 74.4
 # Task: Write a Python program to combine lambda functions with dictionary comprehension to modify all values in a dictionary.
 my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
@@ -4806,3 +4807,335 @@ my_dict = {'a': 1, 'b': 2, 'c': 3, 'd': 4,
 
 result = lambda d, valFunc: {k: valFunc(v) for k, v in d.items()}
 
+# 75.0
+# Task: Write a Python program to find all keys in a dictionary that have the given value.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+val = 2
+result = list(filter(lambda x: my_dict[x] == val, my_dict))
+
+# 75.1
+# Task: Write a Python program to iterate over a dictionary and collect all keys whose value matches a given target.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+val = 2
+
+#for k in my_dict:
+#    if my_dict[k] == val:
+#        print(k)
+
+# 75.2
+# Task: Write a Python program to use list comprehension to extract keys with a specified value from a dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+val = 2
+
+result = list(filter(lambda x: my_dict[x] == val, my_dict))
+
+# 75.3
+# Task: Write a Python program to implement a function that returns a list of keys with a particular value from a dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+val = 2
+
+def extract_key(d, val):
+    return list(filter(lambda x: d[x] == val, d))
+
+# 75.4
+# Task: Write a Python program to compare each key-value pair and output keys if the value equals a specified number.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+val = 2
+
+#for item in my_dict.items():
+#    if item[1] == val:
+#        print(item[0])
+
+# 76.0
+# Task: Write a Python program to combine two lists into a dictionary. The elements of the first one serve as keys and the elements of the second one serve as values. Each item in the first list must be unique and hashable.
+my_list1 = ['Lilith', 'Baal', 'Diablo', 'Mephisto',
+            'Duriel', 'Andariel']
+my_list2 = ['Uber', 5, 4, 3, 2, 1]
+
+result = {}
+
+for l1, l2 in zip(my_list1, my_list2):
+    result.update({l1: l2})
+
+# 76.1
+# Task: Write a Python program to combine two lists into a dictionary using the zip() function, ensuring keys are unique.
+my_list1 = ['Lilith', 'Baal', 'Diablo', 'Mephisto',
+            'Duriel', 'Andariel']
+my_list2 = ['Uber', 5, 4, 3, 2, 1]
+
+result = {}
+
+for l1, l2 in zip(my_list1, my_list2):
+    result.update({l1: l2})
+
+# 76.2
+# Task: Write a Python program to map elements of the first list to the corresponding elements of the second list and handle mismatched lengths.
+my_list1 = ['Lilith', 'Baal', 'Diablo', 'Mephisto',
+            'Duriel', 'Andariel']
+my_list2 = ['Uber', 5, 4, 3, 2, 1]
+
+result = {}
+
+def combine_lsts(l1, l2):
+    out = {}
+   
+    if len(l1) != len(l2):
+        raise ValueError("Length mismatch: Please double-check your key-values pairs.")
+   
+    else:
+        for k, v in zip(l1, l2):
+            out.update({k: v})
+   
+    return out
+   
+# 76.3
+# Task: Write a Python program to use dictionary comprehension to merge two lists into a dictionary and sort the dictionary by keys.
+my_list1 = ['Lilith', 'Baal', 'Diablo', 'Mephisto',
+            'Duriel', 'Andariel']
+my_list2 = ['Uber', 5, 4, 3, 2, 1]
+
+temp_dict = {}
+
+for k, v in zip(my_list1, my_list2):
+    temp_dict[k] = v
+
+result = dict(sorted(temp_dict.items(), key = lambda x: x[0]))
+
+# 76.4
+# Task: Write a Python program to implement error checking when converting two lists to a dictionary, ensuring that all keys are hashable.
+my_list1 = ['Lilith', 'Baal', 'Diablo', 'Mephisto',
+            ['Duriel', 'test'], 'Andariel']
+my_list2 = ['Uber', 5, 4, 3, 2, 1]
+
+def combine_lsts(l1, l2):
+    out = {}
+   
+    if len(l1) != len(l2):
+        return (f"Value error occured: list length mismatch.")
+   
+    for k, v in zip(my_list1, my_list2):
+        try:
+            out[k] = v    
+        except TypeError as e:
+            print(f"Type error occured {e}. ")
+            return ''
+
+    return out
+
+# 77.0
+# Task: Write a Python program to transform a dictionary into a list of tuples.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = list(my_dict.items())
+
+# 77.1
+# Task: Write a Python program to convert a dictionary into a list of (key, value) tuples using the items() method.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = list(my_dict.items())
+
+# 77.2
+# Task: Write a Python program to use list comprehension to generate a list of tuples from a dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+def convert_to_list(d):
+    return [item for item in d.items()]
+
+# 77.3
+# Task: Write a Python program to sort a dictionary's items and return them as a list of tuples.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = list(sorted(my_dict.items(),
+              key = lambda t: tuple(filter(lambda v: v if isinstance(v, (int, float)) else 0, t))))
+
+# 77.4
+# Task: Write a Python program to iterate over a dictionary and append each key-value pair as a tuple to a new list.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = []
+
+for k, v in my_dict.items():
+    result.append((k, v))
+
+# 78.0
+# Task: Write a Python program to create a flat list of all the keys in a flat dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = [k for k in my_dict.keys()]
+
+# 78.1
+# Task: Write a Python program to extract all keys from a flat dictionary and store them in a list using the keys() method.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = list(my_dict.keys())
+
+# 78.2
+# Task: Write a Python program to iterate over a dictionary and build a list of keys manually.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = []
+
+for k in my_dict:
+    result.append(k)
+
+# 78.3
+# Task: Write a Python program to use list comprehension to create a list of all dictionary keys.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = [k for k in my_dict]
+
+# 78.4
+# Task: Write a Python program to implement a function that returns a sorted list of keys from a dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+def sorted_keys(d):
+    return list(sorted(d))
+
+# 79.0
+# Task: Write a Python program to create a flat list of all the values in a flat dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = list(my_dict.values())
+
+# 79.1
+# Task: Write a Python program to extract all values from a flat dictionary into a list using the values() method.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = [v for v in my_dict.values()]
+
+# 79.2
+# Task: Write a Python program to use list comprehension to generate a flat list of dictionary values.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = [v for v in my_dict.values()]
+
+# 79.3
+# Task: Write a Python program to iterate over a dictionary and compile its values into a new list.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+result = []
+
+for v in my_dict.values():
+    result.append(v)
+
+# 79.4
+# Task: Write a Python program to implement a function that returns all values of a dictionary as a list, with an option to sort them.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3,'Duriel': 2, 'Andariel': 1}
+
+def sorted_values(d, sort = False):
+    if sort == False:
+        return [v for v in d.values()]
+    else:
+        return list(sorted(d.values(),
+                    key = lambda v: v if isinstance(v, (int, float)) else 0))
+
+# 80.0
+# Task: Write a Python program to find the key of the maximum value in a dictionary.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3, 'Duriel': 2, 'Andariel': 1}
+
+max_val = max(my_dict.values(), key = lambda v: isinstance(v, (int, float)))
+key = None
+
+for k, v in my_dict.items():
+    if v == max_val:
+        key = k
+
+# 80.1
+# Task: Write a Python program to determine the key associated with the maximum value in a dictionary using max() with a key argument.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3, 'Duriel': 2, 'Andariel': 1}
+
+result = max(my_dict.items(), key = lambda t: tuple(filter(lambda v: isinstance(v, (int, float)), t)))[0]
+
+# 80.2
+# Task: Write a Python program to iterate through a dictionary and return the key for which the value is highest.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3, 'Duriel': 2, 'Andariel': 1}
+
+max_val = 0
+key = None
+
+for k, v in my_dict.items():
+    if isinstance(v, (int, float)):
+        if v > max_val:
+            max_val = v
+       
+    if v == max_val:
+        key = k
+
+# 80.3
+# Task: Write a Python program to implement a function that finds the key of the maximum value and returns both the key and value.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3, 'Duriel': 2, 'Andariel': 1}
+
+def max_item(d):
+    return max(d.items(), key = lambda t: tuple(filter(lambda v: isinstance(v, (int, float)), t)))
+   
+# 80.4
+# Task: Write a Python program to use dictionary comprehension and the max() function to extract the key with the largest value.
+my_dict = {'Lilith': 'Uber', 'Baal': 5, 'Diablo': 4,
+           'Mephisto': 3, 'Duriel': 2, 'Andariel': 1}
+
+def max_item(d):
+    temp_dict = {k: v for k, v in d.items() if isinstance(v, (int, float))}
+   
+    return max(temp_dict.items(), key = lambda x: x[1])
+
+# 81.0
+# Task: Write a Python function that flattens a nested dictionary
+# into a single-level dictionary. The keys in the flattened
+# dictionary should be tuples representing
+# the path to each value.
+my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
+           'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}
+           }
+}
+
+def locate_value(d, key_path):
+    return reduce(getitem, key_path, d)
+print(my_dict)
+
+for v in my_dict.values():
+    print(f"\nVals: {v}")
+for k in my_dict.keys():
+    print(f"\nKeys: {k}")
+   
+
+
+def flatten_dict(d):
+    out = {}
+    for k, v in d.items():
+       
+   
+# 81.1
+# Task: Write a Python function to merge multiple nested dictionaries, preserving the hierarchy.
+
+# 81.2
+# Task: Write a Python function to count the occurrences of each unique key in a deeply nested dictionary.
+
+# 81.3
+# Task: Write a Python function to find and replace all occurrences of a given value in a nested dictionary.
+
+# 81.4
+# Task: Write a Python function to extract all paths (keys) that lead to a given value in a nested dictionary.
