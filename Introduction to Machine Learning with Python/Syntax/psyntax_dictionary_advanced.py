@@ -5103,39 +5103,104 @@ def max_item(d):
     return max(temp_dict.items(), key = lambda x: x[1])
 
 # 81.0
-# Task: Write a Python function that flattens a nested dictionary
-# into a single-level dictionary. The keys in the flattened
-# dictionary should be tuples representing
-# the path to each value.
+# Task: Write a Python function that flattens a nested dictionary into a single-level dictionary. The keys in the flattened dictionary should be tuples representing the path to each value.
 my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
-           'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}
-           }
+           'Lesser Evils': {'Duriel': 2, 'Andariel': 2, 'Specials': {'Lilith': 'Uber'}}
 }
 
-def locate_value(d, key_path):
-    return reduce(getitem, key_path, d)
-print(my_dict)
-
-for v in my_dict.values():
-    print(f"\nVals: {v}")
-for k in my_dict.keys():
-    print(f"\nKeys: {k}")
+def flattened_dict(d, parent_key = (), result = None):
+    if result == None:
+        result = {}
    
-
-
-def flatten_dict(d):
-    out = {}
     for k, v in d.items():
+        new_key = parent_key + (k, )
        
-   
+        if isinstance(v, dict):
+            flattened_dict(v, new_key, result)
+        else:
+            result[new_key] = v
+       
+    return result
+
 # 81.1
 # Task: Write a Python function to merge multiple nested dictionaries, preserving the hierarchy.
+my_dict1 = {'a': 1, 'b': {'x': 10}}
+my_dict2 = {'c': 2, 'd': {'y': 20}}
+
+def merge_nested_dicts(d1, d2):
+    out = d1.copy()
+   
+    for k, v in d2.items():
+        if k in out and isinstance(out[k], dict) and isinstance(v, dict):
+            out[k] = merge_nested_dicts(out[k], v)
+        else:
+            out[k] = v
+   
+    return out
 
 # 81.2
 # Task: Write a Python function to count the occurrences of each unique key in a deeply nested dictionary.
+my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
+           'Lesser Evils': {'Duriel': 2, 'Andariel': 2, 'Specials': {'Lilith': 'Uber'}}
+}
+
+# Method 1:
+def count_unique_keys(d):
+    def flattened_dict(d, out = None):
+        if out is None:
+            out = {}
+       
+        for k, v in d.items():
+            out[k] = v
+           
+            if isinstance(v, dict):
+                flattened_dict(v, out)
+               
+        return out
+   
+    return len(set(flattened_dict(d)))
+
+# Method 2:
+def count_keys(d):
+    total = 0
+    for k, v in d.items():
+        total+=1
+        if isinstance(v, dict):
+            total += count_keys(v)
+   
+    return total
 
 # 81.3
 # Task: Write a Python function to find and replace all occurrences of a given value in a nested dictionary.
+my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
+           'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}}
+}
+
+def replace_value(d, current_val, new_val):
+    for k, v in d.items():
+        if v == current_val:
+            d[k] = new_val
+       
+        if isinstance(v, dict):
+            replace_value(v, current_val, new_val)
+   
+    return d
 
 # 81.4
 # Task: Write a Python function to extract all paths (keys) that lead to a given value in a nested dictionary.
+my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
+           'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}}
+}
+
+def find_path(d, value, parent_key = ()):
+    for k, v in d.items():
+        new_key = parent_key + (k, )
+        if v == value:
+            continue
+       
+        if isinstance(v, dict):
+            find_path(v, value, new_key)
+   
+    return new_key
+
+print(find_path(my_dict, 2))
