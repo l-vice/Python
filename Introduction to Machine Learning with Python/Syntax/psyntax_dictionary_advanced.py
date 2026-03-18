@@ -5171,7 +5171,7 @@ def count_keys(d):
     return total
 
 # 81.3
-# Task: Write a Python function to find and replace all occurrences of a given value in a nested dictionary.
+# Task: Write a Python function to find and replace all occurrence  s of a given value in a nested dictionary.
 my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
            'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}}
 }
@@ -5192,15 +5192,107 @@ my_dict = {'Prime Evils': {'Baal': 5, 'Diablo': 4, 'Mephisto': 3},
            'Lesser Evils': {'Duriel': 2, 'Andariel': 1, 'Specials': {'Lilith': 'Uber'}}
 }
 
-def find_path(d, value, parent_key = ()):
-    for k, v in d.items():
-        new_key = parent_key + (k, )
-        if v == value:
-            continue
-       
-        if isinstance(v, dict):
-            find_path(v, value, new_key)
-   
-    return new_key
+def extract_key_path(d, target_value):
+    path = []
+    
+    def search(d, current_path = ()):
+        for k, v in d.items():
+            new_path = current_path + (key, )
+            
+            if isinstance(v, dict):
+                search(v, new_path)
+            elif v == target_value:
+                path.append(new_path)
+    
+    search(d)
+    
+    return path
 
-print(find_path(my_dict, 2))
+# 82.0
+# Task: Write a Python program to implement a memoization decorator that caches function results based on arguments. The decorator should handle any function 
+# with any number of positional and keyword arguments. Ensure that your implementation correctly handles unhashable arguments (like lists or dictionaries).
+
+
+# Define a decorator function to implement memoization for caching function results.
+def memoize(func):
+    """
+    A decorator that caches function results based on arguments.
+    Handles any function with any number of positional and keyword arguments.
+    Converts unhashable arguments to hashable forms.
+    
+    Args:
+        func: The function to memoize
+        
+    Returns:
+        Wrapped function with memoization
+    """
+    # Initialize a dictionary to store cached results.
+    cache = {}
+    
+    # Define a helper function to convert unhashable arguments into hashable forms.
+    def make_hashable(arg):
+        """Convert unhashable types to hashable representations."""
+        # If the argument is a list or set, convert it to a tuple recursively.
+        if isinstance(arg, (list, set)):
+            return tuple(make_hashable(item) for item in arg)
+        # If the argument is a dictionary, convert it to a sorted tuple of key-value pairs.
+        elif isinstance(arg, dict):
+            return tuple(sorted((k, make_hashable(v)) for k, v in arg.items()))
+        # For all other types (e.g., integers, strings), return the argument as-is.
+        else:
+            return arg
+    
+    # Define the wrapper function that replaces the original function.
+    def wrapper(*args, **kwargs):
+        # Convert positional arguments into a hashable form using the `make_hashable` function.
+        hashable_args = tuple(make_hashable(arg) for arg in args)
+        # Convert keyword arguments into a sorted tuple of hashable key-value pairs.
+        hashable_kwargs = tuple(sorted((k, make_hashable(v)) for k, v in kwargs.items()))
+        # Combine hashable positional and keyword arguments into a single key.
+        key = (hashable_args, hashable_kwargs)
+        
+        # Check if the result for the current arguments is already in the cache.
+        if key not in cache:
+            # If not cached, call the original function and store the result in the cache.
+            cache[key] = func(*args, **kwargs)
+        
+        # Return the cached result.
+        return cache[key]
+    
+    # Return the wrapper function, replacing the original function with the memoized version.
+    return wrapper
+
+ 
+# Example function to memoize - Fibonacci sequence calculation.
+def fibonacci(n):
+    # Base case: return n if n is 0 or 1.
+    if n <= 1:
+        return n
+    # Recursive case: calculate Fibonacci(n-1) + Fibonacci(n-2).
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Example usage with memoization applied to the Fibonacci function.
+@memoize
+def fibonacci_memo(n):
+    # Base case: return n if n is 0 or 1.
+    if n <= 1:
+        return n
+    # Recursive case: calculate Fibonacci(n-1) + Fibonacci(n-2) with memoization.
+    return fibonacci_memo(n-1) + fibonacci_memo(n-2)
+
+# Test the performance of the Fibonacci function with and without memoization.
+import time
+
+# Without memoization (slow for larger values of n).
+start = time.time()  # Record the start time.
+result = fibonacci(30)  # Calculate Fibonacci(30) without memoization.
+end = time.time()  # Record the end time.
+# Print the result and the time taken.
+print(f"Without memoization: {result}, Time: {end - start:.6f} seconds")
+
+# With memoization (much faster due to caching).
+start = time.time()  # Record the start time.
+result = fibonacci_memo(30)  # Calculate Fibonacci(30) with memoization.
+end = time.time()  # Record the end time.
+# Print the result and the time taken.
+print(f"With memoization: {result}, Time: {end - start:.6f} seconds")
