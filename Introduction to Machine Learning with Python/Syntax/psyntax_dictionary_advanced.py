@@ -5238,7 +5238,7 @@ def memoize(func):
         # If the argument is a dictionary, convert it to a sorted tuple of key-value pairs.
         elif isinstance(arg, dict):
             return tuple(sorted((k, make_hashable(v)) for k, v in arg.items()))
-        # For all other types (e.g., integers, strings), return the argument as-is.
+        # Fo all other types (e.g., integers, strings), return the argument as-is.
         else:
             return arg
     
